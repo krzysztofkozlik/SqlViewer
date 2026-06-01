@@ -1,0 +1,43 @@
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: 4px;
+}
+
+.app-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.status-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 16px;
+  font-size: 0.85rem;
+}
+
+.state-badge {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &.state-playing  { background: #1b5e20; color: #a5d6a7; }
+  &.state-paused   { background: #e65100; color: #ffccbc; }
+  &.state-stopped  { background: #37474f; color: #cfd8dc; }
+}
+
+.count-label {
+  opacity: 0.7;
+  min-width: 120px;
+  text-align: right;
+}

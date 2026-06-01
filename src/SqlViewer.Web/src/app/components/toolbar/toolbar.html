@@ -1,0 +1,53 @@
+<mat-toolbar>
+  <span class="app-title">SQL Viewer</span>
+
+  <span class="spacer"></span>
+
+  <button
+    mat-icon-button
+    [disabled]="monitoring.sessionState() === 'Playing'"
+    (click)="monitoring.play()"
+    matTooltip="Play"
+    aria-label="Play">
+    <mat-icon>play_arrow</mat-icon>
+  </button>
+
+  <button
+    mat-icon-button
+    [disabled]="monitoring.sessionState() !== 'Playing'"
+    (click)="monitoring.pause()"
+    matTooltip="Pause"
+    aria-label="Pause">
+    <mat-icon>pause</mat-icon>
+  </button>
+
+  <button
+    mat-icon-button
+    [disabled]="monitoring.sessionState() === 'Stopped'"
+    (click)="monitoring.stop()"
+    matTooltip="Stop"
+    aria-label="Stop">
+    <mat-icon>stop</mat-icon>
+  </button>
+
+  <button
+    mat-icon-button
+    (click)="monitoring.clear()"
+    matTooltip="Clear list"
+    aria-label="Clear list">
+    <mat-icon>clear_all</mat-icon>
+  </button>
+
+  <div class="status-area">
+    <span class="state-badge state-{{ monitoring.sessionState().toLowerCase() }}">
+      {{ monitoring.sessionState() }}
+    </span>
+    <span class="count-label">
+      @if (monitoring.totalCount() > monitoring.displayedCount()) {
+        {{ monitoring.displayedCount() }}&thinsp;/&thinsp;{{ monitoring.totalCount() }} requests
+      } @else {
+        {{ monitoring.displayedCount() }} {{ monitoring.displayedCount() === 1 ? 'request' : 'requests' }}
+      }
+    </span>
+  </div>
+</mat-toolbar>

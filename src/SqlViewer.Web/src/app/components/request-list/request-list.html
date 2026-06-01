@@ -1,0 +1,17 @@
+<div class="list-container">
+  @if (monitoring.requestGroups().length === 0) {
+    <div class="empty-state">
+      @if (monitoring.sessionState() === 'Stopped') {
+        <p>Press <strong>Play</strong> to start monitoring SQL commands.</p>
+      } @else {
+        <p>Waiting for SQL commands&hellip;</p>
+      }
+    </div>
+  } @else {
+    <mat-accordion [multi]="false" displayMode="flat">
+      @for (group of monitoring.requestGroups(); track group.traceId) {
+        <app-request-row [group]="group" />
+      }
+    </mat-accordion>
+  }
+</div>
