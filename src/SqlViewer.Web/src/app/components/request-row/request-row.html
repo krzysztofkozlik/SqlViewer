@@ -1,0 +1,21 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title class="request-title">
+      <span class="url">{{ group().url }}</span>
+    </mat-panel-title>
+    <mat-panel-description class="request-meta">
+      <span class="query-count">
+        {{ group().commands.length }}&nbsp;{{ group().commands.length === 1 ? 'query' : 'queries' }}
+      </span>
+      <span class="total-duration">{{ totalDurationMs() }}&thinsp;ms</span>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <div class="method-name">{{ group().methodName }}</div>
+
+  <div class="command-list">
+    @for (cmd of group().commands; track cmd.capturedAt + $index) {
+      <app-sql-command-row [command]="cmd" />
+    }
+  </div>
+</mat-expansion-panel>

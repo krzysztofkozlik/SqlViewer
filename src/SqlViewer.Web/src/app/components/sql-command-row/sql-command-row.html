@@ -1,0 +1,20 @@
+<mat-expansion-panel class="command-panel">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <span class="cmd-type cmd-{{ command().commandType.toLowerCase() }}">
+        {{ command().commandType }}
+      </span>
+      @if (command().firstTable) {
+        <span class="table-name">{{ command().firstTable }}</span>
+      }
+    </mat-panel-title>
+    <mat-panel-description>
+      <span class="duration">{{ durationMs() }}&thinsp;ms</span>
+      @if (command().rowCount > 0) {
+        <span class="row-count">{{ command().rowCount }}&thinsp;rows</span>
+      }
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <pre class="sql-block">{{ formattedSql() }}</pre>
+</mat-expansion-panel>
