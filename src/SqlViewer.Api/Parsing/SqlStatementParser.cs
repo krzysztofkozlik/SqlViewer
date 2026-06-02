@@ -5,10 +5,10 @@ namespace SqlViewer.Api.Parsing;
 
 public static class SqlStatementParser
 {
-    // Matches: /* MethodName /url/path [traceid] */
-    // TraceId supports both plain hex (W3C format) and hyphenated GUIDs.
+    // Matches: /* MethodName /url/path [traceId/spanId] */
+    // Group 3 = traceId, group 4 = spanId. Grouping is by spanId (one span = one HTTP request handler).
     private static readonly Regex CommentPattern = new(
-        @"/\*\s*(\S+)\s+(\S+)\s+\[([a-fA-F0-9\-]+)\]\s*\*/",
+        @"/\*\s*(\S+)\s+(\S+)\s+\[([a-fA-F0-9\-]+)/([a-fA-F0-9\-]+)\]\s*\*/",
         RegexOptions.Compiled);
 
     private static readonly Regex CommandTypePattern = new(
@@ -25,6 +25,7 @@ public static class SqlStatementParser
         string MethodName,
         string Url,
         string TraceId,
+        string SpanId,
         string CommandType,
         string FirstTable
     );
@@ -41,6 +42,7 @@ public static class SqlStatementParser
         var methodName = commentMatch.Groups[1].Value;
         var url = commentMatch.Groups[2].Value;
         var traceId = commentMatch.Groups[3].Value;
+        var spanId = commentMatch.Groups[4].Value;
 
         var commandType = "UNKNOWN";
         var cmdMatch = CommandTypePattern.Match(sql);
@@ -52,6 +54,6 @@ public static class SqlStatementParser
         if (tableMatch.Success)
             firstTable = tableMatch.Groups[1].Value;
 
-        return new ParsedStatement(methodName, url, traceId, commandType, firstTable);
+        return new ParsedStatement(methodName, url, traceId, spanId, commandType, firstTable);
     }
 }

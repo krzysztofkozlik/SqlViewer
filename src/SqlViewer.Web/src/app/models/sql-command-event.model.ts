@@ -1,5 +1,6 @@
 export interface SqlCommandEvent {
   traceId: string;
+  spanId: string;
   url: string;
   methodName: string;
   commandType: string;

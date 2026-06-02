@@ -9,4 +9,5 @@ public class SqlViewerOptions
     public string MonitoredDatabase { get; set; } = "";
     public int PollIntervalMs { get; set; } = 500;
     public string XEventSessionName { get; set; } = "SqlViewer";
+    public string XEventFileDirectory { get; set; } = @"C:\temp\";
 }

@@ -9,7 +9,7 @@
     </div>
   } @else {
     <mat-accordion [multi]="false" displayMode="flat">
-      @for (group of monitoring.requestGroups(); track group.traceId) {
+      @for (group of monitoring.requestGroups(); track group.spanId) {
         <app-request-row [group]="group" />
       }
     </mat-accordion>

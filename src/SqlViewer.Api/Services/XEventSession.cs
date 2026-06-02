@@ -62,7 +62,7 @@ public sealed class XEventSession : IAsyncDisposable
                 )
             )
             ADD TARGET package0.asynchronous_file_target(
-                SET filename           = N'C:\temp\Momentum_RPC.xel',
+                SET filename           = N'{_options.XEventFileDirectory}{sessionName}.xel',
                     max_file_size      = 50,
                     max_rollover_files = 5
             )
@@ -88,8 +88,6 @@ public sealed class XEventSession : IAsyncDisposable
         if (_connection is null)
             return [];
 
-        var sessionName = _options.XEventSessionName;
-
         const string sql = """
             SELECT
                 event_data.value('(event/@timestamp)[1]',                                  'datetime2(7)') AS [Timestamp],
@@ -102,7 +100,7 @@ public sealed class XEventSession : IAsyncDisposable
             FROM (
                 SELECT CAST(event_data AS XML) AS event_data
                 FROM sys.fn_xe_file_target_read_file(
-                    'C:\temp\Momentum_RPC*.xel',
+                    @FilePattern,
                     NULL, NULL, NULL
                 )
                 WHERE object_name IN ('rpc_completed', 'sql_batch_completed')
@@ -111,9 +109,11 @@ public sealed class XEventSession : IAsyncDisposable
             ORDER BY [Timestamp];
             """;
 
+        var filePattern = $@"{_options.XEventFileDirectory}{_options.XEventSessionName}*.xel";
+
         await using var cmd = new SqlCommand(sql, _connection);
-        cmd.Parameters.AddWithValue("@SessionName", sessionName);
-        cmd.Parameters.AddWithValue("@Since", since);
+        cmd.Parameters.AddWithValue("@FilePattern", filePattern);
+        cmd.Parameters.Add(new SqlParameter("@Since", System.Data.SqlDbType.DateTime2, 7) { Value = since });
 
         var results = new List<RawEvent>();
         await using var reader = await cmd.ExecuteReaderAsync(ct);
