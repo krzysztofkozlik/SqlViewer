@@ -49,13 +49,23 @@ public sealed class XEventSession : IAsyncDisposable
 
         var createSql = $"""
             CREATE EVENT SESSION [{sessionName}] ON SERVER
-            ADD EVENT sqlserver.sql_statement_completed(
+            ADD EVENT sqlserver.rpc_completed(
                 WHERE (
                     sqlserver.database_name = N'{_options.MonitoredDatabase}'
-                    AND sqlserver.server_principal_name = N'{_options.MonitoredLogin}'
+                    AND [sqlserver].[server_principal_name] = N'{_options.MonitoredLogin}'
+                )
+            ),
+            ADD EVENT sqlserver.sql_batch_completed(
+                WHERE (
+                    sqlserver.database_name = N'{_options.MonitoredDatabase}'
+                    AND [sqlserver].[server_principal_name] = N'{_options.MonitoredLogin}'
                 )
             )
-            ADD TARGET package0.ring_buffer(SET max_memory = 51200)
+            ADD TARGET package0.asynchronous_file_target(
+                SET filename           = N'C:\temp\Momentum_RPC.xel',
+                    max_file_size      = 50,
+                    max_rollover_files = 5
+            )
             WITH (MAX_DISPATCH_LATENCY = 1 SECONDS);
 
             ALTER EVENT SESSION [{sessionName}] ON SERVER STATE = START;
@@ -83,16 +93,20 @@ public sealed class XEventSession : IAsyncDisposable
         const string sql = """
             SELECT
                 event_data.value('(event/@timestamp)[1]',                                  'datetime2(7)') AS [Timestamp],
-                event_data.value('(event/data[@name="statement"]/value)[1]',               'nvarchar(max)') AS [Statement],
+                COALESCE(
+                    event_data.value('(event/data[@name="statement"]/value)[1]',  'nvarchar(max)'),
+                    event_data.value('(event/data[@name="batch_text"]/value)[1]', 'nvarchar(max)')
+                ) AS [Statement],
                 event_data.value('(event/data[@name="duration"]/value)[1]',                'bigint')        AS [DurationUs],
                 event_data.value('(event/data[@name="row_count"]/value)[1]',               'bigint')        AS [RowCount]
             FROM (
-                SELECT CAST(target_data AS XML) AS ring_data
-                FROM sys.dm_xe_session_targets  t
-                INNER JOIN sys.dm_xe_sessions   s ON t.event_session_address = s.address
-                WHERE s.name = @SessionName AND t.target_name = 'ring_buffer'
-            ) AS data
-            CROSS APPLY ring_data.nodes('RingBufferTarget/event') AS events(event_data)
+                SELECT CAST(event_data AS XML) AS event_data
+                FROM sys.fn_xe_file_target_read_file(
+                    'C:\temp\Momentum_RPC*.xel',
+                    NULL, NULL, NULL
+                )
+                WHERE object_name IN ('rpc_completed', 'sql_batch_completed')
+            ) AS src
             WHERE event_data.value('(event/@timestamp)[1]', 'datetime2(7)') > @Since
             ORDER BY [Timestamp];
             """;
