@@ -163,6 +163,7 @@ public sealed class MonitoringService : IMonitoringService, IHostedService, IAsy
 
             var commandEvent = new SqlCommandEvent(
                 TraceId: parsed.TraceId,
+                SpanId: parsed.SpanId,
                 Url: parsed.Url,
                 MethodName: parsed.MethodName,
                 CommandType: parsed.CommandType,

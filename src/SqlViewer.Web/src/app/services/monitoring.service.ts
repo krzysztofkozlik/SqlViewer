@@ -9,7 +9,7 @@ import { RequestGroup } from '../models/request-group.model';
 export class MonitoringService implements OnDestroy {
   private readonly hub: HubConnection;
   private readonly groupMap = new Map<string, RequestGroup>();
-  private readonly traceIdOrder: string[] = [];
+  private readonly spanIdOrder: string[] = [];
   private totalRequestsSeen = 0;
 
   readonly sessionState = signal<string>('Stopped');
@@ -46,7 +46,7 @@ export class MonitoringService implements OnDestroy {
 
   clear(): void {
     this.groupMap.clear();
-    this.traceIdOrder.length = 0;
+    this.spanIdOrder.length = 0;
     this.totalRequestsSeen = 0;
     this.requestGroups.set([]);
     this.displayedCount.set(0);
@@ -60,18 +60,18 @@ export class MonitoringService implements OnDestroy {
   }
 
   private addCommand(event: SqlCommandEvent): void {
-    let group = this.groupMap.get(event.traceId);
+    let group = this.groupMap.get(event.spanId);
 
     if (!group) {
       this.totalRequestsSeen++;
 
-      if (this.traceIdOrder.length >= environment.displayLimit) {
-        const oldestId = this.traceIdOrder.shift()!;
+      if (this.spanIdOrder.length >= environment.displayLimit) {
+        const oldestId = this.spanIdOrder.shift()!;
         this.groupMap.delete(oldestId);
       }
 
       group = {
-        traceId: event.traceId,
+        spanId: event.spanId,
         url: event.url,
         methodName: event.methodName,
         commands: [],
@@ -79,8 +79,8 @@ export class MonitoringService implements OnDestroy {
         capturedAt: event.capturedAt,
       };
 
-      this.groupMap.set(event.traceId, group);
-      this.traceIdOrder.push(event.traceId);
+      this.groupMap.set(event.spanId, group);
+      this.spanIdOrder.push(event.spanId);
     }
 
     group.commands.push(event);
@@ -88,9 +88,9 @@ export class MonitoringService implements OnDestroy {
 
     // Newest first
     this.requestGroups.set(
-      [...this.traceIdOrder].reverse().map(id => this.groupMap.get(id)!)
+      [...this.spanIdOrder].reverse().map(id => this.groupMap.get(id)!)
     );
-    this.displayedCount.set(this.traceIdOrder.length);
+    this.displayedCount.set(this.spanIdOrder.length);
     this.totalCount.set(this.totalRequestsSeen);
   }
 
