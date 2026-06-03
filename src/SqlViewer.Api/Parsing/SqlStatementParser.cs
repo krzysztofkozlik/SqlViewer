@@ -1,22 +1,27 @@
 using System.Text.RegularExpressions;
-using SqlViewer.Api.Models;
 
 namespace SqlViewer.Api.Parsing;
 
 public static class SqlStatementParser
 {
     // Matches: /* MethodName /url/path [traceId/spanId] */
-    // Group 3 = traceId, group 4 = spanId. Grouping is by spanId (one span = one HTTP request handler).
+    // Group 3 = traceId, group 4 = spanId.
     private static readonly Regex CommentPattern = new(
         @"/\*\s*(\S+)\s+(\S+)\s+\[([a-fA-F0-9\-]+)/([a-fA-F0-9\-]+)\]\s*\*/",
         RegexOptions.Compiled);
 
+    // Plain SQL — first keyword identifies the operation.
     private static readonly Regex CommandTypePattern = new(
-        @"^\s*(SELECT|INSERT|UPDATE|DELETE|EXEC|EXECUTE|MERGE|CREATE|DROP|ALTER|TRUNCATE)\b",
+        @"^\s*(SELECT|INSERT|UPDATE|DELETE|MERGE|CREATE|DROP|ALTER|TRUNCATE)\b",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-    // Captures the first table name after FROM, UPDATE, INTO, or JOIN.
-    // Handles optional schema prefix: dbo.TableName or [dbo].[TableName].
+    // sp_executesql wraps the real SQL in its first string argument.
+    // Capture the first keyword of that inner SQL instead of reporting "EXEC".
+    private static readonly Regex SpExecuteSqlPattern = new(
+        @"^\s*EXEC(?:UTE)?\s+sp_executesql\s+N?'\s*(SELECT|INSERT|UPDATE|DELETE|MERGE|CREATE|DROP|ALTER|TRUNCATE)\b",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+    // First table after FROM, UPDATE, INTO, or JOIN. Handles optional schema prefix.
     private static readonly Regex FirstTablePattern = new(
         @"\b(?:FROM|UPDATE|INTO|JOIN)\s+(?:\[?\w+\]?\.)?\[?(\w+)\]?",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -44,10 +49,7 @@ public static class SqlStatementParser
         var traceId = commentMatch.Groups[3].Value;
         var spanId = commentMatch.Groups[4].Value;
 
-        var commandType = "UNKNOWN";
-        var cmdMatch = CommandTypePattern.Match(sql);
-        if (cmdMatch.Success)
-            commandType = cmdMatch.Groups[1].Value.ToUpperInvariant();
+        var commandType = ExtractCommandType(sql);
 
         var firstTable = string.Empty;
         var tableMatch = FirstTablePattern.Match(sql);
@@ -55,5 +57,15 @@ public static class SqlStatementParser
             firstTable = tableMatch.Groups[1].Value;
 
         return new ParsedStatement(methodName, url, traceId, spanId, commandType, firstTable);
+    }
+
+    private static string ExtractCommandType(string sql)
+    {
+        var spMatch = SpExecuteSqlPattern.Match(sql);
+        if (spMatch.Success)
+            return spMatch.Groups[1].Value.ToUpperInvariant();
+
+        var cmdMatch = CommandTypePattern.Match(sql);
+        return cmdMatch.Success ? cmdMatch.Groups[1].Value.ToUpperInvariant() : "UNKNOWN";
     }
 }
