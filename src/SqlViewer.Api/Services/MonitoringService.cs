@@ -45,12 +45,12 @@ public sealed class MonitoringService : IMonitoringService, IHostedService, IAsy
         await StopInternalAsync(CancellationToken.None);
     }
 
-    public async Task PlayAsync()
+    public async Task StartAsync()
     {
         await _stateLock.WaitAsync();
         try
         {
-            if (_state == SessionState.Playing) return;
+            if (_state == SessionState.Listening) return;
 
             if (_state == SessionState.Stopped)
             {
@@ -59,14 +59,14 @@ public sealed class MonitoringService : IMonitoringService, IHostedService, IAsy
                 await _xEventSession.CreateAsync();
                 _lastPolledAt = DateTime.UtcNow;
             }
-            else // Paused → Playing: skip events that arrived during the pause.
+            else // Paused → Listening: skip events that arrived during the pause.
             {
                 _lastPolledAt = DateTime.UtcNow;
             }
 
             _pollCts = new CancellationTokenSource();
             _pollTask = RunPollLoopAsync(_pollCts.Token);
-            _state = SessionState.Playing;
+            _state = SessionState.Listening;
         }
         finally
         {
@@ -81,7 +81,7 @@ public sealed class MonitoringService : IMonitoringService, IHostedService, IAsy
         await _stateLock.WaitAsync();
         try
         {
-            if (_state != SessionState.Playing) return;
+            if (_state != SessionState.Listening) return;
 
             await CancelPollLoopAsync();
             _state = SessionState.Paused;

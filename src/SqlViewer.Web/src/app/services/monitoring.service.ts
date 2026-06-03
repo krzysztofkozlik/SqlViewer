@@ -32,8 +32,8 @@ export class MonitoringService implements OnDestroy {
       .catch(err => console.error('SignalR connection failed:', err));
   }
 
-  play(): void {
-    this.http.post(`${environment.apiUrl}/api/session/play`, {}).subscribe();
+  start(): void {
+    this.http.post(`${environment.apiUrl}/api/session/start`, {}).subscribe();
   }
 
   pause(): void {
