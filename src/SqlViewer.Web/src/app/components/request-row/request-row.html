@@ -4,6 +4,7 @@
       <span class="url">{{ group().url }}</span>
     </mat-panel-title>
     <mat-panel-description class="request-meta">
+      <span class="timestamp">{{ timestamp() }}</span>
       <span class="query-count">
         {{ group().commands.length }}&nbsp;{{ group().commands.length === 1 ? 'query' : 'queries' }}
       </span>

@@ -9,6 +9,7 @@
       }
     </mat-panel-title>
     <mat-panel-description>
+      <span class="timestamp">{{ timestamp() }}</span>
       <span class="duration">{{ durationMs() }}&thinsp;ms</span>
       @if (command().rowCount > 0) {
         <span class="row-count">{{ command().rowCount }}&thinsp;rows</span>
