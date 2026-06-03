@@ -17,10 +17,10 @@ public class SessionController : ControllerBase
     [HttpGet]
     public IActionResult GetState() => Ok(new { state = _monitoring.State.ToString() });
 
-    [HttpPost("play")]
-    public async Task<IActionResult> Play()
+    [HttpPost("start")]
+    public async Task<IActionResult> Start()
     {
-        await _monitoring.PlayAsync();
+        await _monitoring.StartAsync();
         return Ok(new { state = _monitoring.State.ToString() });
     }
 

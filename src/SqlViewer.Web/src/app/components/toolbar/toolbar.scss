@@ -31,7 +31,7 @@ mat-toolbar {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 
-  &.state-playing  { background: #1b5e20; color: #a5d6a7; }
+  &.state-listening { background: #1b5e20; color: #a5d6a7; }
   &.state-paused   { background: #e65100; color: #ffccbc; }
   &.state-stopped  { background: #37474f; color: #cfd8dc; }
 }

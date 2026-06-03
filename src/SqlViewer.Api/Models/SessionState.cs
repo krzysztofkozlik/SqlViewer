@@ -3,6 +3,6 @@ namespace SqlViewer.Api.Models;
 public enum SessionState
 {
     Stopped,
-    Playing,
+    Listening,
     Paused
 }

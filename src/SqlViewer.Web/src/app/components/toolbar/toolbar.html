@@ -5,16 +5,16 @@
 
   <button
     mat-icon-button
-    [disabled]="monitoring.sessionState() === 'Playing'"
-    (click)="monitoring.play()"
-    matTooltip="Play"
-    aria-label="Play">
+    [disabled]="monitoring.sessionState() === 'Listening'"
+    (click)="monitoring.start()"
+    matTooltip="Start"
+    aria-label="Start">
     <mat-icon>play_arrow</mat-icon>
   </button>
 
   <button
     mat-icon-button
-    [disabled]="monitoring.sessionState() !== 'Playing'"
+    [disabled]="monitoring.sessionState() !== 'Listening'"
     (click)="monitoring.pause()"
     matTooltip="Pause"
     aria-label="Pause">
