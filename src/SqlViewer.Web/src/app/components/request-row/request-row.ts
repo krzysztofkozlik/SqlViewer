@@ -2,6 +2,7 @@ import { Component, computed, input } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RequestGroup } from '../../models/request-group.model';
 import { SqlCommandRow } from '../sql-command-row/sql-command-row';
+import { formatTime } from '../../utils/format-time';
 
 @Component({
   selector: 'app-request-row',
@@ -15,4 +16,6 @@ export class RequestRow {
   readonly totalDurationMs = computed(() =>
     (this.group().totalDurationUs / 1000).toFixed(1)
   );
+
+  readonly timestamp = computed(() => formatTime(this.group().capturedAt));
 }
