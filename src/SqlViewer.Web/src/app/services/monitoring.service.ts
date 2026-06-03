@@ -6,6 +6,8 @@ import { environment } from '../../environments/environment';
 import { SqlCommandEvent } from '../models/sql-command-event.model';
 import { RequestGroup } from '../models/request-group.model';
 
+export type ConnectionState = 'Connected' | 'Reconnecting' | 'Disconnected';
+
 @Injectable({ providedIn: 'root' })
 export class MonitoringService implements OnDestroy {
   private readonly errors = inject(ErrorService);
@@ -14,6 +16,7 @@ export class MonitoringService implements OnDestroy {
   private readonly spanIdOrder: string[] = [];
   private totalRequestsSeen = 0;
 
+  readonly connectionState = signal<ConnectionState>('Disconnected');
   readonly sessionState = signal<string>('Stopped');
   readonly requestGroups = signal<RequestGroup[]>([]);
   readonly displayedCount = signal<number>(0);
@@ -27,11 +30,38 @@ export class MonitoringService implements OnDestroy {
 
     this.hub.on('ReceiveCommand', (event: SqlCommandEvent) => this.addCommand(event));
     this.hub.on('SessionStateChanged', (state: string) => this.sessionState.set(state));
-    this.hub.onreconnected(() => this.fetchState());
+
+    this.hub.onreconnecting(() => this.connectionState.set('Reconnecting'));
+
+    this.hub.onreconnected(() => {
+      this.connectionState.set('Connected');
+      this.fetchState();
+    });
+
+    this.hub.onclose(() => {
+      this.connectionState.set('Disconnected');
+      this.errors.show('Connection to backend lost. Use the Reconnect button to retry.');
+    });
 
     this.hub.start()
-      .then(() => this.fetchState())
-      .catch(err => console.error('SignalR connection failed:', err));
+      .then(() => {
+        this.connectionState.set('Connected');
+        this.fetchState();
+      })
+      .catch(() => this.connectionState.set('Disconnected'));
+  }
+
+  reconnect(): void {
+    this.connectionState.set('Reconnecting');
+    this.hub.start()
+      .then(() => {
+        this.connectionState.set('Connected');
+        this.fetchState();
+      })
+      .catch(() => {
+        this.connectionState.set('Disconnected');
+        this.errors.show('Reconnect failed. Is the SQL Viewer API running?');
+      });
   }
 
   start(): void {
