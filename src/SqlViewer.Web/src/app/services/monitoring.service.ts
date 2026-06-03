@@ -1,12 +1,14 @@
-import { Injectable, OnDestroy, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, OnDestroy, inject, signal } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
 import { SqlCommandEvent } from '../models/sql-command-event.model';
 import { RequestGroup } from '../models/request-group.model';
 
 @Injectable({ providedIn: 'root' })
 export class MonitoringService implements OnDestroy {
+  private readonly errors = inject(ErrorService);
   private readonly hub: HubConnection;
   private readonly groupMap = new Map<string, RequestGroup>();
   private readonly spanIdOrder: string[] = [];
@@ -33,15 +35,25 @@ export class MonitoringService implements OnDestroy {
   }
 
   start(): void {
-    this.http.post(`${environment.apiUrl}/api/session/start`, {}).subscribe();
+    this.http.post(`${environment.apiUrl}/api/session/start`, {})
+      .subscribe({ error: (e: HttpErrorResponse) => this.errors.show(this.toMessage('Start', e)) });
   }
 
   pause(): void {
-    this.http.post(`${environment.apiUrl}/api/session/pause`, {}).subscribe();
+    this.http.post(`${environment.apiUrl}/api/session/pause`, {})
+      .subscribe({ error: (e: HttpErrorResponse) => this.errors.show(this.toMessage('Pause', e)) });
   }
 
   stop(): void {
-    this.http.post(`${environment.apiUrl}/api/session/stop`, {}).subscribe();
+    this.http.post(`${environment.apiUrl}/api/session/stop`, {})
+      .subscribe({ error: (e: HttpErrorResponse) => this.errors.show(this.toMessage('Stop', e)) });
+  }
+
+  private toMessage(action: string, err: HttpErrorResponse): string {
+    if (err.status === 0)
+      return `${action} failed: cannot reach the backend. Is the SQL Viewer API running?`;
+    const detail = err.error?.message ?? err.message;
+    return `${action} failed (${err.status}): ${detail}`;
   }
 
   clear(): void {
