@@ -8,14 +8,13 @@
         <span class="table-name">{{ command().firstTable }}</span>
       }
     </mat-panel-title>
-    <mat-panel-description>
+    <mat-panel-description class="cmd-meta">
       <span class="timestamp">{{ timestamp() }}</span>
       <span class="duration">{{ durationMs() }}&thinsp;ms</span>
-      @if (command().rowCount > 0) {
-        <span class="row-count">{{ command().rowCount }}&thinsp;rows</span>
-      }
+      <span class="row-count">{{ command().rowCount > 0 ? command().rowCount + ' rows' : '' }}</span>
     </mat-panel-description>
   </mat-expansion-panel-header>
 
+  <div class="method-name">{{ command().methodName }}</div>
   <pre class="sql-block">{{ formattedSql() }}</pre>
 </mat-expansion-panel>

@@ -12,7 +12,7 @@
     </mat-panel-description>
   </mat-expansion-panel-header>
 
-  <div class="method-name">{{ group().methodName }}</div>
+  <div class="trace-ids">{{ group().traceId }}&thinsp;/&thinsp;{{ group().spanId }}</div>
 
   <div class="command-list">
     @for (cmd of group().commands; track cmd.capturedAt + $index) {

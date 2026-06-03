@@ -14,8 +14,9 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-right: 10px;
-  min-width: 58px;
+  width: 58px;
   text-align: center;
+  flex-shrink: 0;
 
   &.cmd-select  { background: #0d47a1; color: #90caf9; }
   &.cmd-insert  { background: #1b5e20; color: #a5d6a7; }
@@ -28,24 +29,46 @@
 .table-name {
   font-weight: 500;
   opacity: 0.9;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
+// Same override as request-row: prevent Material's flex: 2 from stealing space.
+.cmd-meta {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  margin-left: 24px;
+}
+
+// Fixed widths match request-row columns so timestamps align across both row types.
 .timestamp {
   font-family: 'Consolas', 'Fira Code', monospace;
   font-size: 0.78rem;
   opacity: 0.5;
-  min-width: 90px;
+  width: 95px;
 }
 
 .duration {
   font-size: 0.8rem;
   opacity: 0.7;
-  margin-right: 12px;
+  width: 70px;
+  text-align: right;
 }
 
 .row-count {
   font-size: 0.8rem;
   opacity: 0.6;
+  width: 58px;
+  text-align: right;
+}
+
+.method-name {
+  font-size: 0.75rem;
+  opacity: 0.5;
+  font-family: 'Consolas', 'Fira Code', monospace;
+  margin-bottom: 6px;
 }
 
 .sql-block {
