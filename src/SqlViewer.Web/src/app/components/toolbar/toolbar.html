@@ -5,7 +5,7 @@
 
   <button
     mat-icon-button
-    [disabled]="monitoring.sessionState() === 'Listening'"
+    [disabled]="!isConnected() || displayState() === 'Listening'"
     (click)="monitoring.start()"
     matTooltip="Start"
     aria-label="Start">
@@ -14,7 +14,7 @@
 
   <button
     mat-icon-button
-    [disabled]="monitoring.sessionState() !== 'Listening'"
+    [disabled]="!isConnected() || displayState() !== 'Listening'"
     (click)="monitoring.pause()"
     matTooltip="Pause"
     aria-label="Pause">
@@ -23,12 +23,22 @@
 
   <button
     mat-icon-button
-    [disabled]="monitoring.sessionState() === 'Stopped'"
+    [disabled]="!isConnected() || displayState() === 'Stopped'"
     (click)="monitoring.stop()"
     matTooltip="Stop"
     aria-label="Stop">
     <mat-icon>stop</mat-icon>
   </button>
+
+  @if (monitoring.connectionState() === 'Disconnected') {
+    <button
+      mat-icon-button
+      (click)="monitoring.reconnect()"
+      matTooltip="Reconnect to backend"
+      aria-label="Reconnect">
+      <mat-icon>wifi</mat-icon>
+    </button>
+  }
 
   <button
     mat-icon-button
@@ -39,8 +49,8 @@
   </button>
 
   <div class="status-area">
-    <span class="state-badge state-{{ monitoring.sessionState().toLowerCase() }}">
-      {{ monitoring.sessionState() }}
+    <span class="state-badge state-{{ displayState().toLowerCase() }}">
+      {{ displayState() }}
     </span>
     <span class="count-label">
       @if (monitoring.totalCount() > monitoring.displayedCount()) {
