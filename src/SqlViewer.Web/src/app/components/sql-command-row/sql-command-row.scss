@@ -21,8 +21,6 @@
   &.cmd-insert  { background: #1b5e20; color: #a5d6a7; }
   &.cmd-update  { background: #e65100; color: #ffccbc; }
   &.cmd-delete  { background: #b71c1c; color: #ef9a9a; }
-  &.cmd-exec,
-  &.cmd-execute { background: #4a148c; color: #ce93d8; }
   &.cmd-merge   { background: #004d40; color: #80cbc4; }
   &.cmd-unknown { background: #37474f; color: #cfd8dc; }
 }
