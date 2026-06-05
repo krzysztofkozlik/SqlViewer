@@ -28,4 +28,8 @@ export class RequestRow {
     const threshold = this.settings.settings().longRunningThresholdMs;
     return this.group().commands.some(cmd => cmd.durationUs / 1000 > threshold);
   });
+
+  readonly isSlowRequest = computed(() =>
+    this.group().totalDurationUs / 1000 > this.settings.settings().slowRequestThresholdMs
+  );
 }

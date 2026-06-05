@@ -2,6 +2,9 @@
   <mat-expansion-panel-header>
     <mat-panel-title class="request-title">
       <span class="url">{{ group().url }}</span>
+      @if (isSlowRequest()) {
+        <mat-icon class="slow-icon" matTooltip="Slow request — total SQL time {{ totalDurationMs() }}ms">timer</mat-icon>
+      }
       @if (hasLongRunning()) {
         <mat-icon class="warning-icon" matTooltip="Contains long-running queries">warning</mat-icon>
       }
