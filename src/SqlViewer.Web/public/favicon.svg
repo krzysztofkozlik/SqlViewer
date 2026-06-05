@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Lens -->
+  <circle cx="40" cy="40" r="26" fill="none" stroke="#42a5f5" stroke-width="11" stroke-linecap="round"/>
+  <!-- Handle -->
+  <line x1="59" y1="59" x2="84" y2="84" stroke="#42a5f5" stroke-width="11" stroke-linecap="round"/>
+</svg>
