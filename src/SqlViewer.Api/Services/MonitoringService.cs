@@ -22,6 +22,10 @@ public sealed class MonitoringService : IMonitoringService, IHostedService, IAsy
     private Task _pollTask = Task.CompletedTask;
     private DateTime _lastPolledAt = DateTime.UtcNow;
 
+    private int _connectedClients = 0;
+    private CancellationTokenSource? _idleCts;
+    private readonly Lock _idleLock = new();
+
     public SessionState State => _state;
 
     public MonitoringService(
@@ -154,7 +158,6 @@ public sealed class MonitoringService : IMonitoringService, IHostedService, IAsy
 
         foreach (var ev in events)
         {
-            // Advance the watermark so we never reprocess the same event.
             if (ev.TimestampUtc > _lastPolledAt)
                 _lastPolledAt = ev.TimestampUtc;
 
@@ -187,6 +190,55 @@ public sealed class MonitoringService : IMonitoringService, IHostedService, IAsy
             _pollCts.Dispose();
             _pollCts = null;
         }
+    }
+
+    public void NotifyClientConnected()
+    {
+        lock (_idleLock)
+        {
+            _connectedClients++;
+            if (_connectedClients == 1)
+                CancelIdleTimer();
+        }
+    }
+
+    public void NotifyClientDisconnected()
+    {
+        lock (_idleLock)
+        {
+            if (_connectedClients > 0) _connectedClients--;
+            if (_connectedClients == 0)
+                ScheduleIdleStop();
+        }
+    }
+
+    private void CancelIdleTimer()
+    {
+        _idleCts?.Cancel();
+        _idleCts?.Dispose();
+        _idleCts = null;
+    }
+
+    private void ScheduleIdleStop()
+    {
+        if (_options.IdleTimeoutMinutes <= 0) return;
+        CancelIdleTimer();
+        _idleCts = new CancellationTokenSource();
+        _ = RunIdleTimerAsync(_idleCts.Token);
+    }
+
+    private async Task RunIdleTimerAsync(CancellationToken ct)
+    {
+        try
+        {
+            await Task.Delay(TimeSpan.FromMinutes(_options.IdleTimeoutMinutes), ct);
+            _logger.LogInformation(
+                "No active connections for {Minutes} min. Stopping XEvent session automatically.",
+                _options.IdleTimeoutMinutes);
+            await StopInternalAsync(CancellationToken.None);
+            await BroadcastStateAsync();
+        }
+        catch (OperationCanceledException) { }
     }
 
     private Task BroadcastStateAsync() =>

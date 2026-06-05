@@ -8,4 +8,6 @@ public interface IMonitoringService
     Task StartAsync();
     Task PauseAsync();
     Task StopAsync();
+    void NotifyClientConnected();
+    void NotifyClientDisconnected();
 }
