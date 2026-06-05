@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "PowerShell(Get-Content \"$env:APPDATA\\\\NuGet\\\\NuGet.Config\")",
-      "PowerShell(Get-ChildItem \"c:\\\\repos\\\\SqlViewer\\\\src\\\\SqlViewer.Api\" -Recurse | Where-Object { -not $_.PSIsContainer } | Select-Object FullName)"
-    ]
-  }
-}
