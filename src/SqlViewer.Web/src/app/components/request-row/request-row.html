@@ -2,6 +2,9 @@
   <mat-expansion-panel-header>
     <mat-panel-title class="request-title">
       <span class="url">{{ group().url }}</span>
+      @if (hasLongRunning()) {
+        <mat-icon class="warning-icon" matTooltip="Contains long-running queries">warning</mat-icon>
+      }
     </mat-panel-title>
     <mat-panel-description class="request-meta">
       <span class="timestamp">{{ timestamp() }}</span>

@@ -48,6 +48,14 @@
     <mat-icon>clear_all</mat-icon>
   </button>
 
+  <button
+    mat-icon-button
+    (click)="openSettings()"
+    matTooltip="Settings"
+    aria-label="Settings">
+    <mat-icon>settings</mat-icon>
+  </button>
+
   <div class="status-area">
     <span class="state-badge state-{{ displayState().toLowerCase() }}">
       {{ displayState() }}
