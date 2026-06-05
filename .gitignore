@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /src/SqlViewer.Api/wwwroot
 /release.zip
+/.claude/settings.local.json
