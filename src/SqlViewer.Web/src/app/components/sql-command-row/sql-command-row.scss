@@ -26,6 +26,16 @@
   &.cmd-unknown { background: #37474f; color: #cfd8dc; }
 }
 
+.warning-icon {
+  font-size: 1rem;
+  width: 1rem;
+  height: 1rem;
+  color: #ffc107;
+  margin-left: 8px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
 .table-name {
   font-weight: 500;
   opacity: 0.9;

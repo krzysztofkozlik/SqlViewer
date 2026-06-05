@@ -7,6 +7,9 @@
       @if (command().firstTable) {
         <span class="table-name">{{ command().firstTable }}</span>
       }
+      @if (isLongRunning()) {
+        <mat-icon class="warning-icon" matTooltip="Long-running query ({{ durationMs() }}ms)">warning</mat-icon>
+      }
     </mat-panel-title>
     <mat-panel-description class="cmd-meta">
       <span class="timestamp">{{ timestamp() }}</span>
