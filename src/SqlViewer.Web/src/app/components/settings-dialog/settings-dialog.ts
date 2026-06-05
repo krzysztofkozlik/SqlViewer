@@ -16,14 +16,24 @@ export class SettingsDialog {
   private readonly data = inject<AppSettings>(MAT_DIALOG_DATA);
 
   protected readonly thresholdMs = signal(this.data.longRunningThresholdMs);
+  protected readonly slowRequestMs = signal(this.data.slowRequestThresholdMs);
 
   protected onThresholdChange(event: Event): void {
     const value = +(event.target as HTMLInputElement).value;
     if (value > 0) this.thresholdMs.set(value);
   }
 
+  protected onSlowRequestChange(event: Event): void {
+    const value = +(event.target as HTMLInputElement).value;
+    if (value > 0) this.slowRequestMs.set(value);
+  }
+
   protected save(): void {
-    this.dialogRef.close({ ...this.data, longRunningThresholdMs: this.thresholdMs() });
+    this.dialogRef.close({
+      ...this.data,
+      longRunningThresholdMs: this.thresholdMs(),
+      slowRequestThresholdMs: this.slowRequestMs(),
+    });
   }
 
   protected cancel(): void {
