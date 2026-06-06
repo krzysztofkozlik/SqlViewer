@@ -24,6 +24,17 @@
     <span matSuffix>ms</span>
     <mat-hint>Requests whose combined SQL time exceeds this are flagged with a <strong>⏱ timer</strong> icon. Default: 800ms.</mat-hint>
   </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Max displayed requests</mat-label>
+    <input
+      matInput
+      type="number"
+      min="1"
+      [value]="displayLimit()"
+      (change)="onDisplayLimitChange($event)">
+    <mat-hint>When this limit is reached the oldest requests are dropped. Default: 1000.</mat-hint>
+  </mat-form-field>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

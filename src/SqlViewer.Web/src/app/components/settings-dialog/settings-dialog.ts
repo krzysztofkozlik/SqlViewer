@@ -17,6 +17,7 @@ export class SettingsDialog {
 
   protected readonly thresholdMs = signal(this.data.longRunningThresholdMs);
   protected readonly slowRequestMs = signal(this.data.slowRequestThresholdMs);
+  protected readonly displayLimit = signal(this.data.displayLimit);
 
   protected onThresholdChange(event: Event): void {
     const value = +(event.target as HTMLInputElement).value;
@@ -28,11 +29,17 @@ export class SettingsDialog {
     if (value > 0) this.slowRequestMs.set(value);
   }
 
+  protected onDisplayLimitChange(event: Event): void {
+    const value = +(event.target as HTMLInputElement).value;
+    if (value > 0) this.displayLimit.set(value);
+  }
+
   protected save(): void {
     this.dialogRef.close({
       ...this.data,
       longRunningThresholdMs: this.thresholdMs(),
       slowRequestThresholdMs: this.slowRequestMs(),
+      displayLimit: this.displayLimit(),
     });
   }
 

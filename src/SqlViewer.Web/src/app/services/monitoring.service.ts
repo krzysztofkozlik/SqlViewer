@@ -1,7 +1,8 @@
-import { Injectable, OnDestroy, inject, signal } from '@angular/core';
+import { Injectable, OnDestroy, effect, inject, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { ErrorService } from './error.service';
+import { SettingsService } from './settings.service';
 import { environment } from '../../environments/environment';
 import { SqlCommandEvent } from '../models/sql-command-event.model';
 import { RequestGroup } from '../models/request-group.model';
@@ -11,6 +12,7 @@ export type ConnectionState = 'Connected' | 'Reconnecting' | 'Disconnected';
 @Injectable({ providedIn: 'root' })
 export class MonitoringService implements OnDestroy {
   private readonly errors = inject(ErrorService);
+  private readonly settingsService = inject(SettingsService);
   private readonly hub: HubConnection;
   private readonly groupMap = new Map<string, RequestGroup>();
   private readonly spanIdOrder: string[] = [];
@@ -23,6 +25,20 @@ export class MonitoringService implements OnDestroy {
   readonly totalCount = signal<number>(0);
 
   constructor(private http: HttpClient) {
+    effect(() => {
+      const limit = this.settingsService.settings().displayLimit;
+      const excess = this.spanIdOrder.length - limit;
+      if (excess <= 0) return;
+
+      const removed = this.spanIdOrder.splice(0, excess);
+      removed.forEach(id => this.groupMap.delete(id));
+
+      this.requestGroups.set(
+        [...this.spanIdOrder].reverse().map(id => this.groupMap.get(id)!)
+      );
+      this.displayedCount.set(this.spanIdOrder.length);
+    }, { allowSignalWrites: true });
+
     this.hub = new HubConnectionBuilder()
       .withUrl(`${environment.apiUrl}/hub/sql`)
       .withAutomaticReconnect()
@@ -107,7 +123,7 @@ export class MonitoringService implements OnDestroy {
     if (!group) {
       this.totalRequestsSeen++;
 
-      if (this.spanIdOrder.length >= environment.displayLimit) {
+      if (this.spanIdOrder.length >= this.settingsService.settings().displayLimit) {
         const oldestId = this.spanIdOrder.shift()!;
         this.groupMap.delete(oldestId);
       }
