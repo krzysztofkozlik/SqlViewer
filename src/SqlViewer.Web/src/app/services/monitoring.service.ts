@@ -141,8 +141,14 @@ export class MonitoringService implements OnDestroy {
       this.spanIdOrder.push(event.spanId);
     }
 
-    group.commands.push(event);
-    group.totalDurationUs += event.durationUs;
+    // Replace with a new object so Angular's signal input detects the change
+    // and recomputes derived values (totalDurationMs, hasLongRunning, etc.).
+    const updated = {
+      ...group,
+      commands: [...group.commands, event],
+      totalDurationUs: group.totalDurationUs + event.durationUs,
+    };
+    this.groupMap.set(event.spanId, updated);
 
     // Newest first
     this.requestGroups.set(
