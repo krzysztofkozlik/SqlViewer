@@ -1,9 +1,15 @@
 .command-panel {
   margin: 2px 0;
   box-shadow: none !important;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 4px !important;
+  border-radius: 0 !important;
+  border-top: 1px solid #3e3e42;
+
+  // Darker than parent request row (#252526) to create visual depth.
+  --mat-expansion-container-background-color: #1a1a1a;
 }
+
+// Emphasise nesting: left accent line on the outermost edge.
+:host:first-child .command-panel { border-top: none; }
 
 .cmd-type {
   display: inline-block;
@@ -20,10 +26,10 @@
 
   &.cmd-select  { background: #0d47a1; color: #90caf9; }
   &.cmd-insert  { background: #1b5e20; color: #a5d6a7; }
-  &.cmd-update  { background: #e65100; color: #ffccbc; }
-  &.cmd-delete  { background: #b71c1c; color: #ef9a9a; }
+  &.cmd-update  { background: #7a3700; color: #ffccbc; }
+  &.cmd-delete  { background: #7a0000; color: #ef9a9a; }
   &.cmd-merge   { background: #004d40; color: #80cbc4; }
-  &.cmd-unknown { background: #37474f; color: #cfd8dc; }
+  &.cmd-unknown { background: #2d2d2d; color: #9d9d9d; }
 }
 
 .warning-icon {
@@ -38,7 +44,7 @@
 
 .table-name {
   font-weight: 500;
-  opacity: 0.9;
+  color: #cccccc;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -52,31 +58,30 @@
   margin-left: 24px;
 }
 
-// Fixed widths match request-row columns so timestamps align across both row types.
 .timestamp {
   font-family: 'Consolas', 'Fira Code', monospace;
   font-size: 0.78rem;
-  opacity: 0.5;
+  color: #858585;
   width: 95px;
 }
 
 .duration {
   font-size: 0.8rem;
-  opacity: 0.7;
+  color: #858585;
   width: 70px;
   text-align: right;
 }
 
 .row-count {
   font-size: 0.8rem;
-  opacity: 0.6;
+  color: #6a9955; // VS Code string/number green — rows returned is a "result"
   width: 58px;
   text-align: right;
 }
 
 .method-name {
   font-size: 0.75rem;
-  opacity: 0.5;
+  color: #dcdcaa; // VS Code function/method yellow
   font-family: 'Consolas', 'Fira Code', monospace;
   margin-bottom: 6px;
 }
@@ -85,13 +90,13 @@
   margin: 8px 0 4px;
   padding: 12px 16px;
   background: #0d1117;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
+  border: 1px solid #3e3e42;
+  border-radius: 4px;
   font-family: 'Consolas', 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 0.8rem;
   line-height: 1.6;
   white-space: pre-wrap;
   word-break: break-word;
   overflow-x: auto;
-  color: #e6edf3;
+  color: #d4d4d4;
 }
