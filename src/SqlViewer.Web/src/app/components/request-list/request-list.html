@@ -1,4 +1,45 @@
 <div class="list-container">
+
+  <div class="filter-bar">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="url-field">
+      <mat-label>Filter by URL</mat-label>
+      <input
+        matInput
+        type="text"
+        [value]="urlInput()"
+        (input)="urlInput.set($any($event.target).value)"
+        placeholder="contains…">
+      @if (urlInput()) {
+        <button matSuffix mat-icon-button (click)="urlInput.set('')"
+                matTooltip="Clear" aria-label="Clear URL filter">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+
+    <mat-chip-listbox [multiple]="true" class="filter-chips">
+      <mat-chip-option
+        [selected]="showLongRunningOnly()"
+        (selectionChange)="showLongRunningOnly.set($event.selected)"
+        class="chip-warning">
+        <mat-icon>warning</mat-icon>&nbsp;Long-running queries
+      </mat-chip-option>
+      <mat-chip-option
+        [selected]="showSlowOnly()"
+        (selectionChange)="showSlowOnly.set($event.selected)"
+        class="chip-slow">
+        <mat-icon>timer</mat-icon>&nbsp;Slow requests
+      </mat-chip-option>
+    </mat-chip-listbox>
+
+    @if (hasActiveFilters()) {
+      <button mat-stroked-button (click)="clearFilters()" matTooltip="Clear all filters">
+        <mat-icon>filter_alt_off</mat-icon>
+        Clear filters
+      </button>
+    }
+  </div>
+
   @if (monitoring.requestGroups().length === 0) {
     <div class="empty-state">
       @if (monitoring.sessionState() === 'Stopped') {
@@ -7,11 +48,16 @@
         <p>Waiting for SQL commands&hellip;</p>
       }
     </div>
+  } @else if (filteredGroups().length === 0) {
+    <div class="empty-state">
+      <p>No requests match the active filters.</p>
+    </div>
   } @else {
     <mat-accordion [multi]="false" displayMode="flat">
-      @for (group of monitoring.requestGroups(); track group.spanId) {
+      @for (group of filteredGroups(); track group.spanId) {
         <app-request-row [group]="group" />
       }
     </mat-accordion>
   }
+
 </div>

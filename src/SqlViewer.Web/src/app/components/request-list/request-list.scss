@@ -4,6 +4,38 @@
   margin: 0 auto;
 }
 
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.url-field {
+  flex: 1 1 240px;
+  min-width: 200px;
+}
+
+.filter-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+// Match the icon colours used on the row icons for visual consistency.
+.chip-warning.mat-mdc-chip-selected {
+  --mdc-chip-elevated-selected-container-color: #3a2e00;
+  --mdc-chip-selected-label-text-color: #ffc107;
+  mat-icon { color: #ffc107; }
+}
+
+.chip-slow.mat-mdc-chip-selected {
+  --mdc-chip-elevated-selected-container-color: #3a1500;
+  --mdc-chip-selected-label-text-color: #ff5722;
+  mat-icon { color: #ff5722; }
+}
+
 .empty-state {
   text-align: center;
   padding: 80px 24px;
