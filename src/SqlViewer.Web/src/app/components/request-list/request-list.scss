@@ -32,6 +32,20 @@
   --mdc-chip-with-icon-icon-color: #9d9d9d;
 }
 
+.chip-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    flex-shrink: 0;
+  }
+}
+
 // Selected chip colours match the icon colours used in the rows.
 .chip-warning {
   &.mat-mdc-chip-selected {
