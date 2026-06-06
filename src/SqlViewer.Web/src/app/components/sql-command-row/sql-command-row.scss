@@ -79,7 +79,23 @@
 .sql-controls {
   display: flex;
   align-items: center;
+  gap: 8px;
   margin-bottom: 6px;
+}
+
+.copy-btn {
+  color: var(--sv-text-dim);
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+
+  &--done {
+    color: #6a9955; // VS Code comment green — brief "success" colour
+  }
 }
 
 .view-toggle {
