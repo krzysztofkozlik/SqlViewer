@@ -1,6 +1,17 @@
 <h2 mat-dialog-title>Settings</h2>
 
 <mat-dialog-content>
+
+  <div class="theme-toggle">
+    <mat-icon>light_mode</mat-icon>
+    <mat-slide-toggle [checked]="darkMode()" (change)="darkMode.set($event.checked)">
+      Dark mode
+    </mat-slide-toggle>
+    <mat-icon>dark_mode</mat-icon>
+  </div>
+
+  <mat-divider class="section-divider"></mat-divider>
+
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Long-running query threshold</mat-label>
     <input
@@ -35,6 +46,7 @@
       (change)="onDisplayLimitChange($event)">
     <mat-hint>When this limit is reached the oldest requests are dropped. Default: 1000.</mat-hint>
   </mat-form-field>
+
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

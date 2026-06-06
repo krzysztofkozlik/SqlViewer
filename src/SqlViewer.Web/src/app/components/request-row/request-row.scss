@@ -15,7 +15,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #9cdcfe; // VS Code identifier blue — makes URLs stand out from plain text
+  color: var(--sv-color-url);
 }
 
 .slow-icon {
@@ -36,7 +36,6 @@
   flex-shrink: 0;
 }
 
-// flex: 0 0 auto overrides Material's default flex: 2 on mat-panel-description.
 .request-meta {
   flex: 0 0 auto;
   display: flex;
@@ -47,13 +46,13 @@
 .timestamp {
   font-family: 'Consolas', 'Fira Code', monospace;
   font-size: 0.78rem;
-  color: #858585;
+  color: var(--sv-text-dim);
   width: 95px;
 }
 
 .query-count {
   font-size: 0.8rem;
-  color: #858585;
+  color: var(--sv-text-dim);
   width: 80px;
   text-align: right;
 }
@@ -61,14 +60,14 @@
 .total-duration {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #cccccc;
+  color: var(--sv-text-primary);
   width: 76px;
   text-align: right;
 }
 
 .trace-ids {
   font-size: 0.75rem;
-  color: #5a5a5a;
+  color: var(--sv-text-faint);
   font-family: 'Consolas', 'Fira Code', monospace;
   margin-bottom: 8px;
   word-break: break-all;

@@ -10,8 +10,8 @@
   gap: 16px;
   margin-bottom: 16px;
   padding: 12px 16px;
-  background: #252526;
-  border: 1px solid #3e3e42;
+  background: var(--sv-bg-elevated);
+  border: 1px solid var(--sv-border);
   border-radius: 6px;
   flex-wrap: wrap;
 }
@@ -26,10 +26,9 @@
   gap: 8px;
   flex-wrap: wrap;
 
-  // Unselected chip: visible on dark background
-  --mdc-chip-elevated-container-color: #3a3a3a;
-  --mdc-chip-label-text-color: #cccccc;
-  --mdc-chip-with-icon-icon-color: #9d9d9d;
+  --mdc-chip-elevated-container-color: var(--sv-bg-chip);
+  --mdc-chip-label-text-color: var(--sv-chip-text);
+  --mdc-chip-with-icon-icon-color: var(--sv-chip-icon);
 }
 
 .chip-label {
@@ -46,7 +45,6 @@
   }
 }
 
-// Selected chip colours match the icon colours used in the rows.
 .chip-warning {
   &.mat-mdc-chip-selected {
     --mdc-chip-elevated-selected-container-color: #3a2e00;
@@ -66,6 +64,6 @@
 .empty-state {
   text-align: center;
   padding: 80px 24px;
-  color: #5a5a5a;
+  color: var(--sv-text-faint);
   font-size: 1rem;
 }

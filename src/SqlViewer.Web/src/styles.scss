@@ -1,5 +1,7 @@
 @use '@angular/material' as mat;
 
+// ─── Dark theme (default) ────────────────────────────────────────────────────
+
 html {
   @include mat.theme((
     color: (
@@ -12,34 +14,93 @@ html {
     ),
     density: 0,
   ));
+
+  // App-specific colour tokens — dark mode values.
+  // Component SCSS files use var(--sv-*) so both themes work automatically.
+  --sv-bg-page:               #1e1e1e;
+  --sv-bg-elevated:           #252526;
+  --sv-bg-inset:              #1a1a1a;
+  --sv-bg-code:               #0d1117;
+  --sv-bg-chip:               #3a3a3a;
+  --sv-border:                #3e3e42;
+  --sv-scrollbar-track:       #1e1e1e;
+  --sv-scrollbar-thumb:       #424242;
+  --sv-scrollbar-thumb-hover: #5a5a5a;
+  --sv-text-primary:          #cccccc;
+  --sv-text-code:             #d4d4d4;
+  --sv-text-dim:              #858585;
+  --sv-text-faint:            #5a5a5a;
+  --sv-color-url:             #9cdcfe;
+  --sv-color-method:          #dcdcaa;
+  --sv-color-rowcount:        #6a9955;
+  --sv-chip-text:             #cccccc;
+  --sv-chip-icon:             #9d9d9d;
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
+// ─── Light theme ─────────────────────────────────────────────────────────────
+
+html.light-theme {
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      theme-type: light,
+    ),
+    typography: (
+      plain-family: 'Roboto, sans-serif',
+      brand-family: 'Roboto, sans-serif',
+    ),
+    density: 0,
+  ));
+
+  // VS Code Light+ inspired overrides.
+  --sv-bg-page:               #f3f3f3;
+  --sv-bg-elevated:           #ffffff;
+  --sv-bg-inset:              #f5f5f5;
+  --sv-bg-code:               #f5f5f5;
+  --sv-bg-chip:               #e0e0e0;
+  --sv-border:                #e5e5e5;
+  --sv-scrollbar-track:       #f3f3f3;
+  --sv-scrollbar-thumb:       #c1c1c1;
+  --sv-scrollbar-thumb-hover: #a0a0a0;
+  --sv-text-primary:          #333333;
+  --sv-text-code:             #383838;
+  --sv-text-dim:              #717171;
+  --sv-text-faint:            #aaaaaa;
+  --sv-color-url:             #001080;
+  --sv-color-method:          #795e26;
+  --sv-color-rowcount:        #098658;
+  --sv-chip-text:             #333333;
+  --sv-chip-icon:             #555555;
 }
+
+// ─── Global resets ───────────────────────────────────────────────────────────
+
+*, *::before, *::after { box-sizing: border-box; }
 
 html, body {
   height: 100%;
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
-  background-color: #1e1e1e;
-  color: #cccccc;
+  background-color: var(--sv-bg-page);
+  color: var(--sv-text-primary);
 }
 
-// Expansion panels default to VS Code sidebar colour.
-// Individual components override this to create a depth hierarchy:
-//   request rows (#252526) → SQL rows (#1a1a1a) → SQL code (#0d1117)
+// All expansion panels pick up the elevated surface colour.
+// sql-command-row overrides this to --sv-bg-inset for the inner tier.
 .mat-expansion-panel {
-  --mat-expansion-container-background-color: #252526;
+  --mat-expansion-container-background-color: var(--sv-bg-elevated);
 }
 
-// Dark mode scrollbar
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: #1e1e1e; }
-::-webkit-scrollbar-thumb { background: #424242; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #5a5a5a; }
+// ─── Scrollbar ───────────────────────────────────────────────────────────────
 
-// Error toast — must be global because MatSnackBar renders outside the component tree.
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--sv-scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--sv-scrollbar-thumb); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--sv-scrollbar-thumb-hover); }
+
+// ─── Error toast ─────────────────────────────────────────────────────────────
+// Must be global — MatSnackBar renders outside the component tree.
+
 .error-snackbar {
   position: absolute;
   right: 5px;
@@ -51,10 +112,5 @@ html, body {
   color: #fff !important;
 }
 
-.error-snackbar .mdc-snackbar__label {
-  color: #fff !important;
-}
-
-.error-snackbar .mat-mdc-button {
-  color: #ef9a9a !important;
-}
+.error-snackbar .mdc-snackbar__label { color: #fff !important; }
+.error-snackbar .mat-mdc-button { color: #ef9a9a !important; }

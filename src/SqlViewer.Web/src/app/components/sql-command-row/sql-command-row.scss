@@ -2,13 +2,10 @@
   margin: 2px 0;
   box-shadow: none !important;
   border-radius: 0 !important;
-  border-top: 1px solid #3e3e42;
-
-  // Darker than parent request row (#252526) to create visual depth.
-  --mat-expansion-container-background-color: #1a1a1a;
+  border-top: 1px solid var(--sv-border);
+  --mat-expansion-container-background-color: var(--sv-bg-inset);
 }
 
-// Emphasise nesting: left accent line on the outermost edge.
 :host:first-child .command-panel { border-top: none; }
 
 .cmd-type {
@@ -44,13 +41,12 @@
 
 .table-name {
   font-weight: 500;
-  color: #cccccc;
+  color: var(--sv-text-primary);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-// Same override as request-row: prevent Material's flex: 2 from stealing space.
 .cmd-meta {
   flex: 0 0 auto;
   display: flex;
@@ -61,27 +57,27 @@
 .timestamp {
   font-family: 'Consolas', 'Fira Code', monospace;
   font-size: 0.78rem;
-  color: #858585;
+  color: var(--sv-text-dim);
   width: 95px;
 }
 
 .duration {
   font-size: 0.8rem;
-  color: #858585;
+  color: var(--sv-text-dim);
   width: 70px;
   text-align: right;
 }
 
 .row-count {
   font-size: 0.8rem;
-  color: #6a9955; // VS Code string/number green — rows returned is a "result"
+  color: var(--sv-color-rowcount);
   width: 58px;
   text-align: right;
 }
 
 .method-name {
   font-size: 0.75rem;
-  color: #dcdcaa; // VS Code function/method yellow
+  color: var(--sv-color-method);
   font-family: 'Consolas', 'Fira Code', monospace;
   margin-bottom: 6px;
 }
@@ -89,8 +85,8 @@
 .sql-block {
   margin: 8px 0 4px;
   padding: 12px 16px;
-  background: #0d1117;
-  border: 1px solid #3e3e42;
+  background: var(--sv-bg-code);
+  border: 1px solid var(--sv-border);
   border-radius: 4px;
   font-family: 'Consolas', 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 0.8rem;
@@ -98,5 +94,5 @@
   white-space: pre-wrap;
   word-break: break-word;
   overflow-x: auto;
-  color: #d4d4d4;
+  color: var(--sv-text-code);
 }
