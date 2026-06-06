@@ -3,6 +3,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatButtonModule } from '@angular/material/button';
+import { Clipboard } from '@angular/cdk/clipboard';
 import { format } from 'sql-formatter';
 import hljs from 'highlight.js/lib/core';
 import sql from 'highlight.js/lib/languages/sql';
@@ -15,17 +17,28 @@ hljs.registerLanguage('sql', sql);
 
 @Component({
   selector: 'app-sql-command-row',
-  imports: [MatExpansionModule, MatIconModule, MatTooltipModule, MatButtonToggleModule],
+  imports: [MatExpansionModule, MatIconModule, MatTooltipModule, MatButtonToggleModule, MatButtonModule],
   templateUrl: './sql-command-row.html',
   styleUrl: './sql-command-row.scss',
 })
 export class SqlCommandRow {
   private readonly settings = inject(SettingsService);
+  private readonly clipboard = inject(Clipboard);
 
   readonly command = input.required<SqlCommandEvent>();
 
   /** Toggles between formatted+highlighted (false) and raw SQL (true). */
   protected readonly showRaw = signal(false);
+
+  /** Briefly true after a successful copy — drives the checkmark feedback. */
+  protected readonly copied = signal(false);
+
+  protected copy(): void {
+    const text = this.showRaw() ? this.command().sqlText : this.formattedSql();
+    this.clipboard.copy(text);
+    this.copied.set(true);
+    setTimeout(() => this.copied.set(false), 2000);
+  }
 
   readonly durationMs = computed(() =>
     (this.command().durationUs / 1000).toFixed(1)

@@ -31,6 +31,15 @@
         <span class="toggle-label"><mat-icon>code</mat-icon>Raw SQL</span>
       </mat-button-toggle>
     </mat-button-toggle-group>
+
+    <button
+      mat-icon-button
+      class="copy-btn"
+      [class.copy-btn--done]="copied()"
+      [matTooltip]="copied() ? 'Copied!' : 'Copy SQL'"
+      (click)="copy()">
+      <mat-icon>{{ copied() ? 'check' : 'content_copy' }}</mat-icon>
+    </button>
   </div>
 
   @if (showRaw()) {
