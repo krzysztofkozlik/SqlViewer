@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { Toolbar } from './components/toolbar/toolbar';
 import { RequestList } from './components/request-list/request-list';
+import { SettingsService } from './services/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +9,12 @@ import { RequestList } from './components/request-list/request-list';
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App {}
+export class App {
+  constructor() {
+    const settings = inject(SettingsService);
+    // Toggle light-theme class on <html>; absence of the class = dark mode (default).
+    effect(() => {
+      document.documentElement.classList.toggle('light-theme', !settings.settings().darkMode);
+    });
+  }
+}
