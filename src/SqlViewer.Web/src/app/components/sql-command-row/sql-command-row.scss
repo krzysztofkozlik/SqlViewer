@@ -76,11 +76,42 @@
   text-align: right;
 }
 
+.sql-controls {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.view-toggle {
+  font-size: 0.75rem;
+}
+
+.toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  mat-icon {
+    font-size: 15px;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+}
+
 .method-name {
   font-size: 0.75rem;
   color: var(--sv-color-method);
   font-family: 'Consolas', 'Fira Code', monospace;
   margin-bottom: 6px;
+}
+
+// <code> is inside <pre> for the highlighted view — reset its own styles.
+.sql-block code {
+  font: inherit;
+  background: none;
+  padding: 0;
+  color: inherit;
 }
 
 .sql-block {
