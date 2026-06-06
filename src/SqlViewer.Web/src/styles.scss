@@ -22,7 +22,22 @@ html, body {
   height: 100%;
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background-color: #1e1e1e;
+  color: #cccccc;
 }
+
+// Expansion panels default to VS Code sidebar colour.
+// Individual components override this to create a depth hierarchy:
+//   request rows (#252526) → SQL rows (#1a1a1a) → SQL code (#0d1117)
+.mat-expansion-panel {
+  --mat-expansion-container-background-color: #252526;
+}
+
+// Dark mode scrollbar
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #1e1e1e; }
+::-webkit-scrollbar-thumb { background: #424242; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #5a5a5a; }
 
 // Error toast — must be global because MatSnackBar renders outside the component tree.
 .error-snackbar {
@@ -31,8 +46,6 @@ html, body {
   top: 68px;
 }
 
-// CSS custom properties on .error-snackbar don't reach the inner MDC surface element reliably
-// in Angular Material 19, so target it directly.
 .error-snackbar .mdc-snackbar__surface {
   background-color: #b71c1c !important;
   color: #fff !important;
