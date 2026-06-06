@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { debounceTime } from 'rxjs';
+import { delay, of, switchMap } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -31,8 +31,12 @@ export class RequestList {
 
   // Debounced signal — used by filteredGroups so filtering only runs after
   // the user pauses typing, not on every character.
+  // Empty string (clear / initial) emits immediately; non-empty values are
+  // debounced 300ms so filtering doesn't run on every keystroke while typing.
   private readonly urlFilter = toSignal(
-    toObservable(this.urlInput).pipe(debounceTime(300)),
+    toObservable(this.urlInput).pipe(
+      switchMap(v => v === '' ? of('') : of(v).pipe(delay(300)))
+    ),
     { initialValue: '' }
   );
 
