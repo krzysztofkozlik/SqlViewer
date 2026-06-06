@@ -14,10 +14,29 @@
     <mat-panel-description class="cmd-meta">
       <span class="timestamp">{{ timestamp() }}</span>
       <span class="duration">{{ durationMs() }}&thinsp;ms</span>
-      <span class="row-count">{{ command().rowCount > 0 ? command().rowCount + ' rows' : '' }}</span>
+      <span class="row-count">{{ command().rowCount > 0 ? command().rowCount + ' rows' : '' }}</span>
     </mat-panel-description>
   </mat-expansion-panel-header>
 
   <div class="method-name">{{ command().methodName }}</div>
-  <pre class="sql-block">{{ formattedSql() }}</pre>
+
+  <div class="sql-controls">
+    <mat-button-toggle-group
+      [value]="showRaw() ? 'raw' : 'highlighted'"
+      class="view-toggle">
+      <mat-button-toggle value="highlighted" (click)="showRaw.set(false)">
+        <span class="toggle-label"><mat-icon>auto_awesome</mat-icon>Highlighted</span>
+      </mat-button-toggle>
+      <mat-button-toggle value="raw" (click)="showRaw.set(true)">
+        <span class="toggle-label"><mat-icon>code</mat-icon>Raw SQL</span>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  @if (showRaw()) {
+    <pre class="sql-block">{{ command().sqlText }}</pre>
+  } @else {
+    <pre class="sql-block sql-highlight-block"><code [innerHTML]="highlightedSql()"></code></pre>
+  }
+
 </mat-expansion-panel>

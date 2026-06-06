@@ -98,6 +98,37 @@ html, body {
 ::-webkit-scrollbar-thumb { background: var(--sv-scrollbar-thumb); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--sv-scrollbar-thumb-hover); }
 
+// ─── SQL syntax highlighting ─────────────────────────────────────────────────
+// highlight.js injects <span class="hljs-*"> via [innerHTML] which bypasses
+// Angular's view encapsulation, so colours must be defined here in global styles.
+// Scoped to .sql-highlight-block to avoid touching any other code elements.
+
+.sql-highlight-block {
+  // Dark mode — VS Code Dark+ token colours
+  .hljs-keyword,
+  .hljs-type         { color: #569cd6; }
+  .hljs-string       { color: #ce9178; }
+  .hljs-number       { color: var(--sv-color-rowcount); }
+  .hljs-comment      { color: #6a9955; font-style: italic; }
+  .hljs-variable     { color: var(--sv-color-url); }
+  .hljs-built_in     { color: var(--sv-color-method); }
+  .hljs-operator     { color: var(--sv-text-primary); }
+  .hljs-punctuation  { color: var(--sv-text-dim); }
+}
+
+html.light-theme .sql-highlight-block {
+  // Light mode — VS Code Light+ token colours
+  .hljs-keyword,
+  .hljs-type         { color: #0000ff; }
+  .hljs-string       { color: #a31515; }
+  .hljs-number       { color: var(--sv-color-rowcount); }
+  .hljs-comment      { color: #008000; font-style: italic; }
+  .hljs-variable     { color: var(--sv-color-url); }
+  .hljs-built_in     { color: var(--sv-color-method); }
+  .hljs-operator     { color: var(--sv-text-primary); }
+  .hljs-punctuation  { color: var(--sv-text-dim); }
+}
+
 // ─── Dialog ──────────────────────────────────────────────────────────────────
 // In dark mode the Material-generated dialog surface is near-identical to the
 // #1e1e1e page background. Lift it and deepen the backdrop so it reads as modal.
