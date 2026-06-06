@@ -98,6 +98,23 @@ html, body {
 ::-webkit-scrollbar-thumb { background: var(--sv-scrollbar-thumb); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--sv-scrollbar-thumb-hover); }
 
+// ─── Dialog ──────────────────────────────────────────────────────────────────
+// In dark mode the Material-generated dialog surface is near-identical to the
+// #1e1e1e page background. Lift it and deepen the backdrop so it reads as modal.
+
+html:not(.light-theme) {
+  --mat-dialog-container-color: #2d2d2d;
+
+  .mdc-dialog__surface {
+    border: 1px solid #4a4a4a;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.8) !important;
+  }
+
+  .cdk-overlay-dark-backdrop {
+    background: rgba(0, 0, 0, 0.65);
+  }
+}
+
 // ─── Error toast ─────────────────────────────────────────────────────────────
 // Must be global — MatSnackBar renders outside the component tree.
 

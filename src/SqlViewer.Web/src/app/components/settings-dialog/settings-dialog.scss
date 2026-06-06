@@ -11,8 +11,10 @@
 
 .full-width {
   width: 100%;
-  margin-top: 8px;
-  margin-bottom: 24px;
+}
+
+.full-width+.full-width {
+  margin-top: 40px;
 }
 
 mat-dialog-content {
