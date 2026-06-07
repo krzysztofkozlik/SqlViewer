@@ -18,34 +18,36 @@
     </mat-panel-description>
   </mat-expansion-panel-header>
 
-  <div class="method-name">{{ command().methodName }}</div>
+  <ng-template matExpansionPanelContent>
+    <div class="method-name">{{ command().methodName }}</div>
 
-  <div class="sql-controls">
-    <mat-button-toggle-group
-      [value]="showRaw() ? 'raw' : 'highlighted'"
-      class="view-toggle">
-      <mat-button-toggle value="highlighted" (click)="showRaw.set(false)">
-        <span class="toggle-label"><mat-icon>auto_awesome</mat-icon>Highlighted</span>
-      </mat-button-toggle>
-      <mat-button-toggle value="raw" (click)="showRaw.set(true)">
-        <span class="toggle-label"><mat-icon>code</mat-icon>Raw SQL</span>
-      </mat-button-toggle>
-    </mat-button-toggle-group>
+    <div class="sql-controls">
+      <mat-button-toggle-group
+        [value]="showRaw() ? 'raw' : 'highlighted'"
+        class="view-toggle">
+        <mat-button-toggle value="highlighted" (click)="showRaw.set(false)">
+          <span class="toggle-label"><mat-icon>auto_awesome</mat-icon>Highlighted</span>
+        </mat-button-toggle>
+        <mat-button-toggle value="raw" (click)="showRaw.set(true)">
+          <span class="toggle-label"><mat-icon>code</mat-icon>Raw SQL</span>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
 
-    <button
-      mat-icon-button
-      class="copy-btn"
-      [class.copy-btn--done]="copied()"
-      [matTooltip]="copied() ? 'Copied!' : 'Copy SQL'"
-      (click)="copy()">
-      <mat-icon>{{ copied() ? 'check' : 'content_copy' }}</mat-icon>
-    </button>
-  </div>
+      <button
+        mat-icon-button
+        class="copy-btn"
+        [class.copy-btn--done]="copied()"
+        [matTooltip]="copied() ? 'Copied!' : 'Copy SQL'"
+        (click)="copy()">
+        <mat-icon>{{ copied() ? 'check' : 'content_copy' }}</mat-icon>
+      </button>
+    </div>
 
-  @if (showRaw()) {
-    <pre class="sql-block">{{ command().sqlText }}</pre>
-  } @else {
-    <pre class="sql-block sql-highlight-block"><code [innerHTML]="highlightedSql()"></code></pre>
-  }
+    @if (showRaw()) {
+      <pre class="sql-block">{{ command().sqlText }}</pre>
+    } @else {
+      <pre class="sql-block sql-highlight-block"><code [innerHTML]="highlightedSql()"></code></pre>
+    }
+  </ng-template>
 
 </mat-expansion-panel>
