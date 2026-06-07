@@ -4,10 +4,15 @@ namespace SqlViewer.Api.Parsing;
 
 public static class SqlStatementParser
 {
-    // Matches: /* MethodName /url/path [traceId/spanId] */
-    // Group 3 = traceId, group 4 = spanId.
+    // Matches two comment formats (no spaces around the slash in either case):
+    //   Web API: /* MethodName /url/path [traceId/spanId] */
+    //   Non Web API:  /* MethodName AssemblyName [processName/operationId] */
+    // Group 1 = methodName, group 2 = url/assemblyName,
+    // group 3 = traceId/processName, group 4 = spanId/operationId (grouping key).
+    // [^\]/\s]+ allows any non-whitespace, non-bracket, non-slash characters
+    // so processNames like "dotnet" are accepted alongside hex traceIds.
     private static readonly Regex CommentPattern = new(
-        @"/\*\s*(\S+)\s+(\S+)\s+\[([a-fA-F0-9\-]+)/([a-fA-F0-9\-]+)\]\s*\*/",
+        @"/\*\s*(\S+)\s+(\S+)\s+\[([^\]/\s]+)/([^\]\s]+)\]\s*\*/",
         RegexOptions.Compiled);
 
     // Plain SQL — first keyword identifies the operation.
