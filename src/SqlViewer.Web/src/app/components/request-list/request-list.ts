@@ -49,6 +49,8 @@ export class RequestList {
     !!this.urlInput() || this.showLongRunningOnly() || this.showSlowOnly()
   );
 
+  protected readonly displayLimit = computed(() => this.settings.settings().displayLimit);
+
   protected readonly filteredGroups = computed(() => {
     const url = (this.urlFilter() ?? '').toLowerCase().trim();
     const longOnly = this.showLongRunningOnly();
