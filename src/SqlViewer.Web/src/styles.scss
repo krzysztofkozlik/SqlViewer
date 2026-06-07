@@ -35,6 +35,23 @@ html {
   --sv-color-rowcount:        #6a9955;
   --sv-chip-text:             #cccccc;
   --sv-chip-icon:             #9d9d9d;
+
+  // Session state badge colours — dark mode: saturated bg, light-tint text.
+  // RECONNECTING uses a darker amber (not #f57f17 which is too bright for dark);
+  // DISCONNECTED uses lighter red (#b71c1c) so it doesn't vanish against #1e1e1e.
+  --sv-state-listening-bg:     #2e7d32; --sv-state-listening-fg:     #c8e6c9;
+  --sv-state-paused-bg:        #e65100; --sv-state-paused-fg:        #ffe0b2;
+  --sv-state-stopped-bg:       #455a64; --sv-state-stopped-fg:       #cfd8dc;
+  --sv-state-reconnecting-bg:  #7a5100; --sv-state-reconnecting-fg:  #ffcc80;
+  --sv-state-disconnected-bg:  #b71c1c; --sv-state-disconnected-fg:  #ffcdd2;
+
+  // Command-type badge colours — dark mode: saturated bg, light-tint text.
+  --sv-cmd-select-bg:  #1565c0; --sv-cmd-select-fg:  #bbdefb;
+  --sv-cmd-insert-bg:  #2e7d32; --sv-cmd-insert-fg:  #c8e6c9;
+  --sv-cmd-update-bg:  #e65100; --sv-cmd-update-fg:  #ffe0b2;
+  --sv-cmd-delete-bg:  #c62828; --sv-cmd-delete-fg:  #ffcdd2;
+  --sv-cmd-merge-bg:   #00695c; --sv-cmd-merge-fg:   #b2dfdb;
+  --sv-cmd-unknown-bg: #424242; --sv-cmd-unknown-fg: #bdbdbd;
 }
 
 // ─── Light theme ─────────────────────────────────────────────────────────────
@@ -71,6 +88,21 @@ html.light-theme {
   --sv-color-rowcount:        #098658;
   --sv-chip-text:             #333333;
   --sv-chip-icon:             #555555;
+
+  // Session state badge colours — light mode: light-tint bg, saturated text.
+  --sv-state-listening-bg:     #e8f5e9; --sv-state-listening-fg:     #2e7d32;
+  --sv-state-paused-bg:        #fff3e0; --sv-state-paused-fg:        #e65100;
+  --sv-state-stopped-bg:       #eceff1; --sv-state-stopped-fg:       #455a64;
+  --sv-state-reconnecting-bg:  #fff8e1; --sv-state-reconnecting-fg:  #e65100;
+  --sv-state-disconnected-bg:  #ffebee; --sv-state-disconnected-fg:  #b71c1c;
+
+  // Command-type badge colours — light mode: light-tint bg, saturated text.
+  --sv-cmd-select-bg:  #e3f2fd; --sv-cmd-select-fg:  #1565c0;
+  --sv-cmd-insert-bg:  #e8f5e9; --sv-cmd-insert-fg:  #2e7d32;
+  --sv-cmd-update-bg:  #fff3e0; --sv-cmd-update-fg:  #e65100;
+  --sv-cmd-delete-bg:  #ffebee; --sv-cmd-delete-fg:  #c62828;
+  --sv-cmd-merge-bg:   #e0f2f1; --sv-cmd-merge-fg:   #00695c;
+  --sv-cmd-unknown-bg: #f5f5f5; --sv-cmd-unknown-fg: #424242;
 }
 
 // ─── Global resets ───────────────────────────────────────────────────────────

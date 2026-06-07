@@ -21,12 +21,12 @@
   text-align: center;
   flex-shrink: 0;
 
-  &.cmd-select  { background: #0d47a1; color: #90caf9; }
-  &.cmd-insert  { background: #1b5e20; color: #a5d6a7; }
-  &.cmd-update  { background: #7a3700; color: #ffccbc; }
-  &.cmd-delete  { background: #7a0000; color: #ef9a9a; }
-  &.cmd-merge   { background: #004d40; color: #80cbc4; }
-  &.cmd-unknown { background: #2d2d2d; color: #9d9d9d; }
+  &.cmd-select  { background: var(--sv-cmd-select-bg);  color: var(--sv-cmd-select-fg);  }
+  &.cmd-insert  { background: var(--sv-cmd-insert-bg);  color: var(--sv-cmd-insert-fg);  }
+  &.cmd-update  { background: var(--sv-cmd-update-bg);  color: var(--sv-cmd-update-fg);  }
+  &.cmd-delete  { background: var(--sv-cmd-delete-bg);  color: var(--sv-cmd-delete-fg);  }
+  &.cmd-merge   { background: var(--sv-cmd-merge-bg);   color: var(--sv-cmd-merge-fg);   }
+  &.cmd-unknown { background: var(--sv-cmd-unknown-bg); color: var(--sv-cmd-unknown-fg); }
 }
 
 .warning-icon {

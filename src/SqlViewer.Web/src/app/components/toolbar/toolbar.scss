@@ -31,10 +31,10 @@ mat-toolbar {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 
-  &.state-listening     { background: #1b5e20; color: #a5d6a7; }
-  &.state-paused        { background: #e65100; color: #ffccbc; }
-  &.state-stopped       { background: #37474f; color: #cfd8dc; }
-  &.state-reconnecting  { background: #f57f17; color: #fff8e1; }
-  &.state-disconnected  { background: #4e0000; color: #ef9a9a; }
+  &.state-listening     { background: var(--sv-state-listening-bg);    color: var(--sv-state-listening-fg);    }
+  &.state-paused        { background: var(--sv-state-paused-bg);       color: var(--sv-state-paused-fg);       }
+  &.state-stopped       { background: var(--sv-state-stopped-bg);      color: var(--sv-state-stopped-fg);      }
+  &.state-reconnecting  { background: var(--sv-state-reconnecting-bg); color: var(--sv-state-reconnecting-fg); }
+  &.state-disconnected  { background: var(--sv-state-disconnected-bg); color: var(--sv-state-disconnected-fg); }
 }
 
