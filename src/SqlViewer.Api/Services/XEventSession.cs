@@ -63,10 +63,10 @@ public sealed class XEventSession : IAsyncDisposable
             )
             ADD TARGET package0.asynchronous_file_target(
                 SET filename           = N'{_options.XEventFileDirectory}{sessionName}.xel',
-                    max_file_size      = 50,
-                    max_rollover_files = 5
+                    max_file_size      = {_options.XEventMaxFileSizeMb},
+                    max_rollover_files = {_options.XEventMaxRolloverFiles}
             )
-            WITH (MAX_DISPATCH_LATENCY = 1 SECONDS);
+            WITH (MAX_DISPATCH_LATENCY = {_options.XEventDispatchLatencySeconds} SECONDS);
 
             ALTER EVENT SESSION [{sessionName}] ON SERVER STATE = START;
             """;
