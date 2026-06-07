@@ -55,9 +55,16 @@ export class RequestList {
     const url = (this.urlFilter() ?? '').toLowerCase().trim();
     const longOnly = this.showLongRunningOnly();
     const slowOnly = this.showSlowOnly();
+
+    const groups = this.monitoring.requestGroups();
+
+    // Fast path: return the same array reference when no filters are active,
+    // avoiding both the n function calls and the new array allocation.
+    if (!url && !longOnly && !slowOnly) return groups;
+
     const { longRunningThresholdMs, slowRequestThresholdMs } = this.settings.settings();
 
-    return this.monitoring.requestGroups().filter(group => {
+    return groups.filter(group => {
       if (url && !group.url.toLowerCase().includes(url)) return false;
       if (longOnly && !group.commands.some(cmd => cmd.durationUs / 1000 > longRunningThresholdMs)) return false;
       if (slowOnly && group.totalDurationUs / 1000 <= slowRequestThresholdMs) return false;

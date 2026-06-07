@@ -18,11 +18,13 @@
     </mat-panel-description>
   </mat-expansion-panel-header>
 
-  <div class="trace-ids">{{ group().traceId }}&thinsp;/&thinsp;{{ group().spanId }}</div>
+  <ng-template matExpansionPanelContent>
+    <div class="trace-ids">{{ group().traceId }}&thinsp;/&thinsp;{{ group().spanId }}</div>
 
-  <div class="command-list">
-    @for (cmd of group().commands; track cmd.capturedAt + $index) {
-      <app-sql-command-row [command]="cmd" />
-    }
-  </div>
+    <div class="command-list">
+      @for (cmd of group().commands; track cmd.capturedAt + $index) {
+        <app-sql-command-row [command]="cmd" />
+      }
+    </div>
+  </ng-template>
 </mat-expansion-panel>
