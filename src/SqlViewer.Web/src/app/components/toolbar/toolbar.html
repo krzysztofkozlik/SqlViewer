@@ -60,12 +60,5 @@
     <span class="state-badge state-{{ displayState().toLowerCase() }}">
       {{ displayState() }}
     </span>
-    <span class="count-label">
-      @if (monitoring.totalCount() > monitoring.displayedCount()) {
-        {{ monitoring.displayedCount() }}&thinsp;/&thinsp;{{ monitoring.totalCount() }} requests
-      } @else {
-        {{ monitoring.displayedCount() }} {{ monitoring.displayedCount() === 1 ? 'request' : 'requests' }}
-      }
-    </span>
   </div>
 </mat-toolbar>

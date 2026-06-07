@@ -4,6 +4,31 @@
   margin: 0 auto;
 }
 
+.stats-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 0 2px;
+  font-size: 0.78rem;
+  color: var(--sv-text-dim);
+}
+
+.stat-value {
+  font-weight: 600;
+  color: var(--sv-text-primary);
+}
+
+.stat-sep {
+  color: var(--sv-text-faint);
+}
+
+.stat-capped {
+  color: #f57f17; // amber — draws attention without being alarming
+  font-style: italic;
+}
+
 .filter-bar {
   display: flex;
   align-items: center;

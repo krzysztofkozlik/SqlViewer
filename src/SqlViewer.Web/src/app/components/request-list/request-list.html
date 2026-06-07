@@ -40,6 +40,30 @@
     }
   </div>
 
+  @if (monitoring.totalCount() > 0) {
+    <div class="stats-bar">
+      <span>
+        <span class="stat-value">{{ monitoring.totalCount() }}</span>
+        {{ monitoring.totalCount() === 1 ? 'request' : 'requests' }} captured this session
+      </span>
+
+      @if (hasActiveFilters()) {
+        <span class="stat-sep">·</span>
+        <span>
+          <span class="stat-value">{{ filteredGroups().length }}</span>
+          {{ filteredGroups().length === 1 ? 'matches' : 'match' }} current filter
+        </span>
+      }
+
+      @if (monitoring.totalCount() > displayLimit()) {
+        <span class="stat-sep">·</span>
+        <span class="stat-capped">
+          list shows latest {{ displayLimit() }} only
+        </span>
+      }
+    </div>
+  }
+
   @if (monitoring.requestGroups().length === 0) {
     <div class="empty-state">
       @if (monitoring.sessionState() === 'Stopped') {
