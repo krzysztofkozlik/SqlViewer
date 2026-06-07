@@ -32,4 +32,8 @@ export class RequestRow {
   readonly isSlowRequest = computed(() =>
     this.group().totalDurationUs / 1000 > this.settings.settings().slowRequestThresholdMs
   );
+
+  readonly hasEmptyQueries = computed(() =>
+    this.group().commands.some(cmd => !cmd.firstTable && cmd.rowCount === 0)
+  );
 }

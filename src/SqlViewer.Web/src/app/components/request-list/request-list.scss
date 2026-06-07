@@ -86,6 +86,14 @@
   }
 }
 
+.chip-empty {
+  &.mat-mdc-chip-selected {
+    --mdc-chip-elevated-selected-container-color: #2a0a2e;
+    --mdc-chip-selected-label-text-color: #ce93d8;
+    mat-icon { color: #ce93d8; }
+  }
+}
+
 .empty-state {
   text-align: center;
   padding: 80px 24px;

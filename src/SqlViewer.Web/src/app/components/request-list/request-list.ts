@@ -42,11 +42,12 @@ export class RequestList {
 
   protected readonly showLongRunningOnly = signal(false);
   protected readonly showSlowOnly = signal(false);
+  protected readonly showEmptyQueriesOnly = signal(false);
 
   // Intentionally uses urlInput (not urlFilter) so the clear button appears
   // and disappears immediately as the user types/clears.
   protected readonly hasActiveFilters = computed(() =>
-    !!this.urlInput() || this.showLongRunningOnly() || this.showSlowOnly()
+    !!this.urlInput() || this.showLongRunningOnly() || this.showSlowOnly() || this.showEmptyQueriesOnly()
   );
 
   protected readonly displayLimit = computed(() => this.settings.settings().displayLimit);
@@ -56,11 +57,12 @@ export class RequestList {
     const longOnly = this.showLongRunningOnly();
     const slowOnly = this.showSlowOnly();
 
+    const emptyOnly = this.showEmptyQueriesOnly();
     const groups = this.monitoring.requestGroups();
 
     // Fast path: return the same array reference when no filters are active,
     // avoiding both the n function calls and the new array allocation.
-    if (!url && !longOnly && !slowOnly) return groups;
+    if (!url && !longOnly && !slowOnly && !emptyOnly) return groups;
 
     const { longRunningThresholdMs, slowRequestThresholdMs } = this.settings.settings();
 
@@ -68,6 +70,7 @@ export class RequestList {
       if (url && !group.url.toLowerCase().includes(url)) return false;
       if (longOnly && !group.commands.some(cmd => cmd.durationUs / 1000 > longRunningThresholdMs)) return false;
       if (slowOnly && group.totalDurationUs / 1000 <= slowRequestThresholdMs) return false;
+      if (emptyOnly && !group.commands.some(cmd => !cmd.firstTable && cmd.rowCount === 0)) return false;
       return true;
     });
   });
@@ -76,5 +79,6 @@ export class RequestList {
     this.urlInput.set('');
     this.showLongRunningOnly.set(false);
     this.showSlowOnly.set(false);
+    this.showEmptyQueriesOnly.set(false);
   }
 }

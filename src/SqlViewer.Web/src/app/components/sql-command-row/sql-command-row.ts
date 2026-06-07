@@ -50,6 +50,12 @@ export class SqlCommandRow {
     this.command().durationUs / 1000 > this.settings.settings().longRunningThresholdMs
   );
 
+  // EF Core sometimes emits queries with no table and no rows when it determines
+  // at build time that no results are possible (e.g. WHERE 1=0 short-circuit).
+  readonly isEmptyQuery = computed(() =>
+    !this.command().firstTable && this.command().rowCount === 0
+  );
+
   readonly formattedSql = computed(() =>
     format(this.command().sqlText, { language: 'tsql', tabWidth: 2 })
   );
