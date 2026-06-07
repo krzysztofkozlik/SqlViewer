@@ -72,8 +72,9 @@
 .row-count {
   font-size: 0.8rem;
   color: var(--sv-color-rowcount);
-  width: 58px;
+  width: 84px;
   text-align: right;
+  white-space: nowrap;
 }
 
 .sql-controls {
