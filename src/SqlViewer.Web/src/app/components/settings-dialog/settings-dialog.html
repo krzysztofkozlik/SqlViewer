@@ -21,7 +21,7 @@
       [value]="thresholdMs()"
       (change)="onThresholdChange($event)">
     <span matSuffix>ms</span>
-    <mat-hint>Individual queries exceeding this duration are flagged with a <strong>⚠ warning</strong> icon. Default: 400ms.</mat-hint>
+    <mat-hint>Individual queries exceeding this duration are flagged with a <strong>⚠ warning</strong> icon. Default: {{ defaults.longRunningThresholdMs }}ms.</mat-hint>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="full-width">
@@ -33,7 +33,7 @@
       [value]="slowRequestMs()"
       (change)="onSlowRequestChange($event)">
     <span matSuffix>ms</span>
-    <mat-hint>Requests whose combined SQL time exceeds this are flagged with a <strong>⏱ timer</strong> icon. Default: 800ms.</mat-hint>
+    <mat-hint>Requests whose combined SQL time exceeds this are flagged with a <strong>⏱ timer</strong> icon. Default: {{ defaults.slowRequestThresholdMs }}ms.</mat-hint>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="full-width">
@@ -44,7 +44,7 @@
       min="1"
       [value]="displayLimit()"
       (change)="onDisplayLimitChange($event)">
-    <mat-hint>When this limit is reached the oldest requests are dropped. Default: 1000.</mat-hint>
+    <mat-hint>When this limit is reached the oldest requests are dropped. Default: {{ defaults.displayLimit }}.</mat-hint>
   </mat-form-field>
 
 </mat-dialog-content>

@@ -3,24 +3,17 @@ using SqlViewer.Api.Services;
 
 namespace SqlViewer.Api.Hubs;
 
-public class SqlHub : Hub
+public class SqlHub(IMonitoringService monitoring) : Hub
 {
-    private readonly IMonitoringService _monitoring;
-
-    public SqlHub(IMonitoringService monitoring)
-    {
-        _monitoring = monitoring;
-    }
-
     public override Task OnConnectedAsync()
     {
-        _monitoring.NotifyClientConnected();
+        monitoring.NotifyClientConnected();
         return base.OnConnectedAsync();
     }
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        _monitoring.NotifyClientDisconnected();
+        monitoring.NotifyClientDisconnected();
         return base.OnDisconnectedAsync(exception);
     }
 }

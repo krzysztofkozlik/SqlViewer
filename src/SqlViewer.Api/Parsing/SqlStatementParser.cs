@@ -28,8 +28,7 @@ public static class SqlStatementParser
 
     // First table after FROM, UPDATE, INTO, or JOIN.
     // Handles optional schema prefix and an optional block comment between the
-    // keyword and the table name — EF Core injects the trace comment there for UPDATE:
-    //   UPDATE /*comment*/ [dbo].[Channels] SET ...
+    // keyword and the table name
     private static readonly Regex FirstTablePattern = new(
         @"\b(?:FROM|UPDATE|INTO|JOIN)\s+(?:/\*[\s\S]*?\*/\s*)?(?:\[?\w+\]?\.)?\[?(\w+)\]?",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
