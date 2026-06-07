@@ -37,7 +37,7 @@ export class MonitoringService implements OnDestroy {
         [...this.spanIdOrder].reverse().map(id => this.groupMap.get(id)!)
       );
       this.displayedCount.set(this.spanIdOrder.length);
-    }, { allowSignalWrites: true });
+    });
 
     this.hub = new HubConnectionBuilder()
       .withUrl(`${environment.apiUrl}/hub/sql`)
