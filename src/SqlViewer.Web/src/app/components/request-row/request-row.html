@@ -8,6 +8,9 @@
       @if (hasLongRunning()) {
         <mat-icon class="warning-icon" matTooltip="Contains long-running queries">warning</mat-icon>
       }
+      @if (hasEmptyQueries()) {
+        <mat-icon class="empty-query-icon" matTooltip="Contains empty queries — EF determined no results were possible">do_not_disturb</mat-icon>
+      }
     </mat-panel-title>
     <mat-panel-description class="request-meta">
       <span class="timestamp">{{ timestamp() }}</span>

@@ -30,6 +30,12 @@
         class="chip-slow">
         <span class="chip-label"><mat-icon>timer</mat-icon>Slow requests</span>
       </mat-chip-option>
+      <mat-chip-option
+        [selected]="showEmptyQueriesOnly()"
+        (selectionChange)="showEmptyQueriesOnly.set($event.selected)"
+        class="chip-empty">
+        <span class="chip-label"><mat-icon>do_not_disturb</mat-icon>Empty queries</span>
+      </mat-chip-option>
     </mat-chip-listbox>
 
     @if (hasActiveFilters()) {

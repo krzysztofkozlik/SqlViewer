@@ -6,6 +6,11 @@
       </span>
       @if (command().firstTable) {
         <span class="table-name">{{ command().firstTable }}</span>
+      } @else {
+        <span class="table-name table-name--unknown">no table</span>
+      }
+      @if (isEmptyQuery()) {
+        <mat-icon class="empty-query-icon" matTooltip="Empty query — EF determined no results were possible">do_not_disturb</mat-icon>
       }
       @if (isLongRunning()) {
         <mat-icon class="warning-icon" matTooltip="Long-running query ({{ durationMs() }}ms)">warning</mat-icon>
