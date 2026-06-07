@@ -90,13 +90,13 @@ public sealed class XEventSession : IAsyncDisposable
 
         const string sql = """
             SELECT
-                event_data.value('(event/@timestamp)[1]',                                  'datetime2(7)') AS [Timestamp],
+                event_data.value('(event/@timestamp)[1]', 'datetime2(7)') AS [Timestamp],
                 COALESCE(
                     event_data.value('(event/data[@name="statement"]/value)[1]',  'nvarchar(max)'),
                     event_data.value('(event/data[@name="batch_text"]/value)[1]', 'nvarchar(max)')
                 ) AS [Statement],
-                event_data.value('(event/data[@name="duration"]/value)[1]',                'bigint')        AS [DurationUs],
-                event_data.value('(event/data[@name="row_count"]/value)[1]',               'bigint')        AS [RowCount]
+                event_data.value('(event/data[@name="duration"]/value)[1]', 'bigint') AS [DurationUs],
+                event_data.value('(event/data[@name="row_count"]/value)[1]', 'bigint') AS [RowCount]
             FROM (
                 SELECT CAST(event_data AS XML) AS event_data
                 FROM sys.fn_xe_file_target_read_file(

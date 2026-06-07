@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
-import { AppSettings } from '../../models/app-settings.model';
+import { AppSettings, DEFAULT_SETTINGS } from '../../models/app-settings.model';
 
 @Component({
   selector: 'app-settings-dialog',
@@ -17,6 +17,8 @@ import { AppSettings } from '../../models/app-settings.model';
 export class SettingsDialog {
   private readonly dialogRef = inject(MatDialogRef<SettingsDialog>);
   private readonly data = inject<AppSettings>(MAT_DIALOG_DATA);
+
+  protected readonly defaults = DEFAULT_SETTINGS;
 
   protected readonly darkMode = signal(this.data.darkMode);
   protected readonly thresholdMs = signal(this.data.longRunningThresholdMs);
