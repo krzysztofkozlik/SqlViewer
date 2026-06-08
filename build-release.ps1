@@ -3,25 +3,43 @@
 .SYNOPSIS
     Builds a release package for SqlViewer (backend + frontend combined).
 
+.PARAMETER Version
+    Version string used in the output zip filename, e.g. "1.0.0".
+    Produces: SqlViewer-v1.0.0-win-x64.zip
+
 .PARAMETER SelfContained
     Bundle the .NET 9 runtime into the executable.
     Produces a larger file (~150 MB) but the target machine needs no .NET installation.
     Without this flag (default) the exe is ~15 MB but requires .NET 9 runtime on the machine.
 
 .EXAMPLE
-    .\build-release.ps1                  # framework-dependent (smaller, .NET 9 required)
-    .\build-release.ps1 -SelfContained   # self-contained  (larger, no .NET required)
+    .\build-release.ps1 -Version 1.0.0
+    .\build-release.ps1 -Version 1.0.0 -SelfContained
 #>
 param(
+    [string]$Version,
     [switch]$SelfContained
 )
 
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 
+if (-not $Version) {
+    [xml]$csproj = Get-Content "$root\src\SqlViewer.Api\SqlViewer.Api.csproj"
+    $Version = $csproj.Project.PropertyGroup.Version
+    if (-not $Version) { throw "No <Version> found in SqlViewer.Api.csproj and none supplied via -Version." }
+}
+Write-Host "Version: $Version" -ForegroundColor Cyan
+
 function Step([string]$msg) { Write-Host "`n==> $msg" -ForegroundColor Cyan }
 function Ok([string]$msg)   { Write-Host "    $msg"   -ForegroundColor Green }
 function Warn([string]$msg) { Write-Host "    $msg"   -ForegroundColor Yellow }
+
+# ---------------------------------------------------------------------------
+Step "Restoring frontend dependencies..."
+Push-Location "$root\src\SqlViewer.Web"
+try   { npm ci }
+finally { Pop-Location }
 
 # ---------------------------------------------------------------------------
 Step "Building Angular frontend (production)..."
@@ -69,7 +87,7 @@ Remove-Item "$releaseDir\*.staticwebassets.endpoints.json"   -Force -ErrorAction
 
 # ---------------------------------------------------------------------------
 Step "Creating release zip..."
-$zip = "$root\release.zip"
+$zip = "$root\SqlViewer-v$Version-win-x64.zip"
 if (Test-Path $zip) { Remove-Item $zip -Force }
 Compress-Archive -Path "$releaseDir\*" -DestinationPath $zip
 Ok "Archive: $zip"
