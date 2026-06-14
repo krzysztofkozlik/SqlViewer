@@ -52,15 +52,16 @@
 .table-name {
   font-weight: 500;
   color: var(--sv-text-primary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-right: 4px;
 
   &--unknown {
     font-weight: 400;
     font-style: italic;
     color: var(--sv-text-faint);
   }
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 .cmd-meta {
