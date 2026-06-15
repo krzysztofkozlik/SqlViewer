@@ -53,7 +53,7 @@ public static class SqlStatementParser
             using var doc = JsonDocument.Parse(commentMatch.Groups[1].Value);
             var root = doc.RootElement;
             methodName = GetString(root, "cs");
-            url        = GetString(root, "ctx");
+            url        = GetString(root, "ctx").Replace("''", "'");
             traceId    = GetString(root, "parentId");
             spanId     = GetString(root, "id");
         }
@@ -64,8 +64,9 @@ public static class SqlStatementParser
 
         var commandType = ExtractCommandType(sql);
 
+        var sqlWithoutComment = JsonCommentPattern.Replace(sql, "");
         var firstTable = string.Empty;
-        var tableMatch = FirstTablePattern.Match(sql);
+        var tableMatch = FirstTablePattern.Match(sqlWithoutComment);
         if (tableMatch.Success)
             firstTable = tableMatch.Groups[1].Value;
 
