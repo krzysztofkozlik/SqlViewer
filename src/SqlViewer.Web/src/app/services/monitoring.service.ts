@@ -20,6 +20,8 @@ export class MonitoringService implements OnDestroy {
 
   readonly connectionState = signal<ConnectionState>('Disconnected');
   readonly sessionState = signal<string>('Stopped');
+  readonly monitoredDatabase = signal<string>('');
+  readonly monitoredLogin = signal<string>('');
   readonly requestGroups = signal<RequestGroup[]>([]);
   readonly displayedCount = signal<number>(0);
   readonly totalCount = signal<number>(0);
@@ -113,8 +115,12 @@ export class MonitoringService implements OnDestroy {
 
   private fetchState(): void {
     this.http
-      .get<{ state: string }>(`${environment.apiUrl}/api/session`)
-      .subscribe({ next: res => this.sessionState.set(res.state) });
+      .get<{ state: string; monitoredDatabase: string; monitoredLogin: string }>(`${environment.apiUrl}/api/session`)
+      .subscribe({ next: res => {
+        this.sessionState.set(res.state);
+        this.monitoredDatabase.set(res.monitoredDatabase ?? '');
+        this.monitoredLogin.set(res.monitoredLogin ?? '');
+      }});
   }
 
   private addCommand(event: SqlCommandEvent): void {

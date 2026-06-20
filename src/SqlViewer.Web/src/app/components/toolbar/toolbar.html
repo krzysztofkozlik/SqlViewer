@@ -1,6 +1,14 @@
 <mat-toolbar>
   <span class="app-title">SQL Viewer</span>
 
+  @if (monitoring.monitoredDatabase()) {
+    <span class="monitor-info">
+      <span class="monitor-label">db</span>{{ monitoring.monitoredDatabase() }}
+      <span class="monitor-sep">·</span>
+      <span class="monitor-label">user</span>{{ monitoring.monitoredLogin() }}
+    </span>
+  }
+
   <span class="spacer"></span>
 
   <button

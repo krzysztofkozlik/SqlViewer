@@ -15,7 +15,12 @@ public class SessionController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetState() => Ok(new { state = _monitoring.State.ToString() });
+    public IActionResult GetState() => Ok(new
+    {
+        state = _monitoring.State.ToString(),
+        monitoredDatabase = _monitoring.MonitoredDatabase,
+        monitoredLogin = _monitoring.MonitoredLogin,
+    });
 
     [HttpPost("start")]
     public async Task<IActionResult> Start()

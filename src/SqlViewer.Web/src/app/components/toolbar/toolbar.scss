@@ -23,6 +23,29 @@ mat-toolbar {
   font-size: 0.85rem;
 }
 
+.monitor-info {
+  font-size: 0.75rem;
+  color: var(--sv-text-dim);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 24px;
+}
+
+.monitor-label {
+  font-weight: 600;
+  color: var(--sv-text-faint);
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+}
+
+.monitor-sep {
+  color: var(--sv-text-faint);
+  margin: 0 2px;
+}
+
 .state-badge {
   padding: 3px 10px;
   border-radius: 12px;

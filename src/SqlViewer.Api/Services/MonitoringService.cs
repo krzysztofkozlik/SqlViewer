@@ -28,6 +28,8 @@ public sealed class MonitoringService : IMonitoringService, IHostedService, IAsy
     private readonly Lock _idleLock = new();
 
     public SessionState State => _state;
+    public string MonitoredDatabase => _options.MonitoredDatabase;
+    public string MonitoredLogin => _options.MonitoredLogin;
 
     public MonitoringService(
         IOptions<SqlViewerOptions> options,
