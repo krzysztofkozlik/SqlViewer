@@ -38,12 +38,11 @@
       </mat-chip-option>
     </mat-chip-listbox>
 
-    @if (hasActiveFilters()) {
-      <button mat-stroked-button (click)="clearFilters()" matTooltip="Clear all filters">
-        <mat-icon>filter_alt_off</mat-icon>
-        Clear filters
-      </button>
-    }
+    <button mat-stroked-button (click)="clearFilters()" matTooltip="Clear all filters"
+            [disabled]="!hasActiveFilters()">
+      <mat-icon>filter_alt_off</mat-icon>
+      Clear filters
+    </button>
   </div>
 
   @if (monitoring.totalCount() > 0) {
