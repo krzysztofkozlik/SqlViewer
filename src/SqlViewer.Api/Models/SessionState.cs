@@ -4,5 +4,6 @@ public enum SessionState
 {
     Stopped,
     Listening,
-    Paused
+    Paused,
+    Reconnecting
 }

@@ -133,6 +133,22 @@ public sealed class XEventSession : IAsyncDisposable
     }
 
     /// <summary>
+    /// Replaces the underlying SQL connection without touching the XEvent session on the server.
+    /// Call this after a connection drop detected during polling.
+    /// </summary>
+    public async Task ReconnectAsync(CancellationToken ct = default)
+    {
+        if (_connection is not null)
+        {
+            try { await _connection.DisposeAsync(); } catch { }
+            _connection = null;
+        }
+
+        _connection = new SqlConnection(_options.MonitoringConnectionString);
+        await _connection.OpenAsync(ct);
+    }
+
+    /// <summary>
     /// Stops and drops the XEvent session. Safe to call even if the session no longer exists.
     /// </summary>
     public async Task DropAsync(CancellationToken ct = default)

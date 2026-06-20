@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using SqlViewer.Api.Configuration;
 using SqlViewer.Api.Hubs;
@@ -128,6 +129,8 @@ public sealed class MonitoringService : IMonitoringService, IHostedService, IAsy
         }
     }
 
+    private static readonly int[] ReconnectDelaysSeconds = [2, 4, 8, 16, 30];
+
     private async Task RunPollLoopAsync(CancellationToken ct)
     {
         using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(_options.PollIntervalMs));
@@ -143,9 +146,49 @@ public sealed class MonitoringService : IMonitoringService, IHostedService, IAsy
             {
                 break;
             }
+            catch (Exception ex) when (ex is SqlException or InvalidOperationException)
+            {
+                _logger.LogWarning(ex, "SQL connection lost.");
+                await ReconnectLoopAsync(ct);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error during XEvent poll. Continuing.");
+            }
+        }
+    }
+
+    private async Task ReconnectLoopAsync(CancellationToken ct)
+    {
+        // Write _state without the lock — safe because CancelPollLoopAsync awaits this
+        // task before acquiring _stateLock, so no concurrent writer is possible here.
+        _state = SessionState.Reconnecting;
+        await BroadcastStateAsync();
+
+        for (int attempt = 0; !ct.IsCancellationRequested; attempt++)
+        {
+            var delaySec = ReconnectDelaysSeconds[Math.Min(attempt, ReconnectDelaysSeconds.Length - 1)];
+            _logger.LogInformation("Reconnect attempt {Attempt} in {Delay}s...", attempt + 1, delaySec);
+
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(delaySec), ct);
+
+                if (_xEventSession is not null)
+                    await _xEventSession.ReconnectAsync(ct);
+
+                _state = SessionState.Listening;
+                await BroadcastStateAsync();
+                _logger.LogInformation("Reconnected to SQL Server successfully.");
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Reconnect attempt {Attempt} failed.", attempt + 1);
             }
         }
     }
