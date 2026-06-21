@@ -213,6 +213,7 @@ public sealed class MonitoringService : IMonitoringService, IHostedService, IAsy
                 TraceId: parsed.TraceId,
                 SpanId: parsed.SpanId,
                 Url: parsed.Url,
+                RequestType: parsed.RequestType,
                 MethodName: parsed.MethodName,
                 CommandType: parsed.CommandType,
                 FirstTable: parsed.FirstTable,

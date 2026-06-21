@@ -1,6 +1,15 @@
 <mat-expansion-panel>
   <mat-expansion-panel-header>
     <mat-panel-title class="request-title">
+      <span class="request-type-slot">
+        @if (group().requestType === 'JOB') {
+          <mat-icon class="job-icon" matTooltip="Hangfire job">schedule</mat-icon>
+        } @else if (group().requestType) {
+          <span class="http-method http-method--{{ group().requestType.toLowerCase() }}">
+            {{ group().requestType }}
+          </span>
+        }
+      </span>
       <span class="url">{{ group().url }}</span>
       @if (isSlowRequest()) {
         <mat-icon class="slow-icon" matTooltip="Slow request — total SQL time {{ totalDurationMs() }}ms">timer</mat-icon>

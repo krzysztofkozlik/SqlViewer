@@ -52,6 +52,15 @@ html {
   --sv-cmd-delete-bg:  #c62828; --sv-cmd-delete-fg:  #ffcdd2;
   --sv-cmd-merge-bg:   #00695c; --sv-cmd-merge-fg:   #b2dfdb;
   --sv-cmd-unknown-bg: #424242; --sv-cmd-unknown-fg: #bdbdbd;
+
+  // HTTP method badge colours — dark mode. Distinct palette from SQL command types.
+  --sv-http-get-bg:    #1a237e; --sv-http-get-fg:    #c5cae9;
+  --sv-http-post-bg:   #004d40; --sv-http-post-fg:   #b2dfdb;
+  --sv-http-put-bg:    #bf360c; --sv-http-put-fg:    #ffccbc;
+  --sv-http-patch-bg:  #4a148c; --sv-http-patch-fg:  #e1bee7;
+  --sv-http-delete-bg: #880e4f; --sv-http-delete-fg: #fce4ec;
+  --sv-http-other-bg:  #37474f; --sv-http-other-fg:  #cfd8dc;
+  --sv-http-job-color: #80cbc4;
 }
 
 // ─── Light theme ─────────────────────────────────────────────────────────────
@@ -103,6 +112,15 @@ html.light-theme {
   --sv-cmd-delete-bg:  #ffebee; --sv-cmd-delete-fg:  #c62828;
   --sv-cmd-merge-bg:   #e0f2f1; --sv-cmd-merge-fg:   #00695c;
   --sv-cmd-unknown-bg: #f5f5f5; --sv-cmd-unknown-fg: #424242;
+
+  // HTTP method badge colours — light mode.
+  --sv-http-get-bg:    #e8eaf6; --sv-http-get-fg:    #1a237e;
+  --sv-http-post-bg:   #e0f2f1; --sv-http-post-fg:   #004d40;
+  --sv-http-put-bg:    #fbe9e7; --sv-http-put-fg:    #bf360c;
+  --sv-http-patch-bg:  #f3e5f5; --sv-http-patch-fg:  #4a148c;
+  --sv-http-delete-bg: #fce4ec; --sv-http-delete-fg: #880e4f;
+  --sv-http-other-bg:  #eceff1; --sv-http-other-fg:  #37474f;
+  --sv-http-job-color: #00695c;
 }
 
 // ─── Global resets ───────────────────────────────────────────────────────────

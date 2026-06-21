@@ -138,6 +138,7 @@ export class MonitoringService implements OnDestroy {
         spanId: event.spanId,
         traceId: event.traceId,
         url: event.url,
+        requestType: event.requestType,
         commands: [],
         totalDurationUs: 0,
         capturedAt: event.capturedAt,

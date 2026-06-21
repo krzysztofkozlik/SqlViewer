@@ -34,6 +34,7 @@ public static class SqlStatementParser
         string Url,
         string TraceId,
         string SpanId,
+        string RequestType,
         string CommandType,
         string FirstTable
     );
@@ -47,15 +48,16 @@ public static class SqlStatementParser
         if (!commentMatch.Success)
             return null;
 
-        string methodName, url, traceId, spanId;
+        string methodName, url, traceId, spanId, requestType;
         try
         {
             using var doc = JsonDocument.Parse(commentMatch.Groups[1].Value);
             var root = doc.RootElement;
-            methodName = GetString(root, "cs");
-            url        = GetString(root, "ctx").Replace("''", "'");
-            traceId    = GetString(root, "parentId");
-            spanId     = GetString(root, "id");
+            methodName  = GetString(root, "cs");
+            url         = GetString(root, "ctx").Replace("''", "'");
+            traceId     = GetString(root, "parentId");
+            spanId      = GetString(root, "id");
+            requestType = GetString(root, "type").ToUpperInvariant();
         }
         catch (JsonException)
         {
@@ -70,7 +72,7 @@ public static class SqlStatementParser
         if (tableMatch.Success)
             firstTable = tableMatch.Groups[1].Value;
 
-        return new ParsedStatement(methodName, url, traceId, spanId, commandType, firstTable);
+        return new ParsedStatement(methodName, url, traceId, spanId, requestType, commandType, firstTable);
     }
 
     private static string GetString(JsonElement root, string property) =>
